@@ -4,18 +4,35 @@
     <meta charset="UTF-8">
     <title>Spare</title>
     <link rel="stylesheet" href="../bootstrap-3.3.7-dist/css/bootstrap.min.css"/>
-    <link rel="stylesheet" href="../bootstrap-3.3.7-dist/css/nav.css"/>
+    <script type="text/javascript" src="../bootstrap-3.3.7-dist/js/jquery-3.3.1.js"></script>
     <script type="text/javascript" src="../bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="../bootstrap-3.3.7-dist/js/jquery-2.0.0.min.js"></script>
+    <script type="text/javascript" src="../bootstrap-3.3.7-dist/js/common.js"></script>
 </head>
+<style>
+    li {
+        list-style: none;
+    }
+</style>
 <body>
 <div class="container-fluid">
-    <div class="row-fluid">
-        <div class="span12">
-            <h3>
+    <h1 class="col-lg-offset-1">删除角色</h1>
+    <ul>
+        <li class=" col-lg-offset-1 dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                 删除角色
-            </h3>
-        </div>
+                <b class="caret"></b>
+            </a>
+            <ul class="dropdown-menu">
+                <li value="7"><a href="#">deleterole1</a></li>
+                <li value="8"><a href="#">deleterole2</a></li>
+                <li value="9"><a href="#">deleterole3</a></li>
+            </ul>
+        </li>
+    </ul>
+</div>
+<div class="col-lg-offset-2 control-group">
+    <div class="controls">
+        <button type="submit" class="btn btn-info">提交</button>
     </div>
 </div>
 </body>
