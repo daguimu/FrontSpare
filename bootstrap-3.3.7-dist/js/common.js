@@ -1,10 +1,10 @@
-function basefun(method, data, fun) {
+function basefun(method, data, requestme, fun) {
     $.post({
         url: "http://localhost:9999/" + method,
-        type: "post",
+        type: requestme,
         data: JSON.stringify(data),
         dataType: "json",
-        Origin:"http://localhost:9999/",
+        Origin: "http://localhost:9999/",
         contentType: "application/json",
         success: function (resultdata) {
             fun(resultdata);
@@ -53,27 +53,27 @@ function createTurnPage(name, elcount) {
     return container;
 }
 
-$(document).on('mouseup', '.paginationjs-pages li', function() {
-    var curv=$(this).text();
-    if(isNaN(curv)){
-        var tem=$(".active").text();
-        if(curv=="»"){
-            if($(".paginationjs-pages li a:eq(-2)").text()==tem){
+$(document).on('mouseup', '.paginationjs-pages li', function () {
+    var curv = $(this).text();
+    if (isNaN(curv)) {
+        var tem = $(".active").text();
+        if (curv == "»") {
+            if ($(".paginationjs-pages li a:eq(-2)").text() == tem) {
                 ;
-            }else{
+            } else {
                 tem++;
             }
 
-        }else if(curv=="«") {
-            if($(".paginationjs-pages li a:eq(1)").text()==tem){
+        } else if (curv == "«") {
+            if ($(".paginationjs-pages li a:eq(1)").text() == tem) {
                 ;
-            }else{
+            } else {
                 tem--;
             }
         }
         $("#currpage").val(tem);
         Init(tem);
-    }else {
+    } else {
         $("#currpage").val(curv);
         Init(curv);
     }

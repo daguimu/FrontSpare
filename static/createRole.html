@@ -4,29 +4,67 @@
     <meta charset="UTF-8">
     <title>Spare</title>
     <link rel="stylesheet" href="../bootstrap-3.3.7-dist/css/bootstrap.min.css"/>
-    <link rel="stylesheet" href="../bootstrap-3.3.7-dist/css/nav.css"/>
-    <script type="text/javascript" src="../bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../bootstrap-3.3.7-dist/js/jquery-3.3.1.js"></script>
+    <script type="text/javascript" src="../bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../bootstrap-3.3.7-dist/js/common.js"></script>
 </head>
 <body>
 <div class="container-fluid">
     <div class="row-fluid">
         <div class="span12">
-            <form>
+            <div>
                 <fieldset>
                     <legend>创建角色</legend>
-                    <label>角色名:&nbsp</label><input type="text"/><br/><br/>
+                    <label>角色名:&nbsp</label><input type="text" name="roleName"/><br/><br/>
                     <div class="control-group">
                         <div class="controls">
-                            <button type="submit" class="btn btn-info">开始创建</button>
+                            <button type="submit" class="btn btn-info">创建角色</button>
                         </div>
                     </div>
                 </fieldset>
-            </form>
+            </div>
         </div>
     </div>
+    <!--模态框-->
+    <div class="span4">
+        <div class="modal fade bs-example-modal-sm" id="model" tabindex="-1" role="dialog"
+             aria-labelledby="mySmallModalLabel">
+            <div class="modal-dialog modal-sm" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h3 id="myModalLabel">
+                            执行状态:
+                        </h3>
+                    </div>
+                    <div class="modal-body">
+                        <p id="modelcontext">
+                            没有返回消息
+                        </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
 </body>
-
+<script type="text/javascript">
+    $("[type='submit']").click(function () {
+        var  role ={};
+        role.roleName=$("[name='roleName']").val();
+        basefun("addRole", role, "POST", function (result) {
+            $("#modelcontext").html(result.message);
+            $("#model").modal("show");
+            $('#model').on('hidden.bs.modal', function () {
+                if (result.success) {
+                    self.location = "info.html";
+                }
+            })
+        });
+    });
+</script>
 </html>

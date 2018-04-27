@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <title>Spare</title>
     <link rel="stylesheet" href="../bootstrap-3.3.7-dist/css/bootstrap.min.css"/>
-    <script type="text/javascript" src="../bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../bootstrap-3.3.7-dist/js/jquery-3.3.1.js"></script>
+    <script type="text/javascript" src="../bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../bootstrap-3.3.7-dist/js/common.js"></script>
 </head>
 <style>
@@ -23,7 +23,7 @@
             <div class="container-fluid">
                 <div class="row-fluid">
                     <div class="span12">
-                        <form class="form-horizontal">
+                        <div class="form-horizontal">
                             <div class="control-group">
                                 <label class="control-label" for="deptName">学院名字:</label>
                                 <div class="controls">
@@ -33,13 +33,10 @@
                                     <ul>
                                         <li class="dropdown">
                                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                                添加院长
+                                                请选择院长
                                                 <b class="caret"></b>
                                             </a>
                                             <ul class="dropdown-menu">
-                                                <li value="1"><a href="#">deptOfDean1</a></li>
-                                                <li value="2"><a href="#">deptOfDean2</a></li>
-                                                <li value="3"><a href="#">deptOfDean3</a></li>
                                             </ul>
                                         </li>
                                     </ul>
@@ -48,13 +45,10 @@
                                     <ul>
                                         <li class="dropdown">
                                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                                添加学院书记
+                                                请选择学院书记
                                                 <b class="caret"></b>
                                             </a>
                                             <ul class="dropdown-menu">
-                                                <li value="4"><a href="#">deptSecretary1</a></li>
-                                                <li value="5"><a href="#">deptSecretary2</a></li>
-                                                <li><a value="6">deptSecretary3</a></li>
                                             </ul>
                                         </li>
                                     </ul>
@@ -63,39 +57,99 @@
                                     <ul>
                                         <li class="dropdown">
                                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                                添加学院导员
+                                                请选择学院导员
                                                 <b class="caret"></b>
                                             </a>
                                             <ul class="dropdown-menu">
-                                                <li value="7"><a href="#">deptInstructor1</a></li>
-                                                <li value="8"><a href="#">deptInstructor2</a></li>
-                                                <li value="9"><a href="#">deptInstructor3</a></li>
                                             </ul>
                                         </li>
                                     </ul>
                                 </div>
                                 <div class="control-group">
                                     <div class="controls">
-                                        <button type="submit" class="btn btn-info">登陆</button>
+                                        <button type="submit" class="btn btn-info">添加</button>
                                     </div>
                                 </div>
                             </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <!--模态框-->
+    <div class="span4">
+        <div class="modal fade bs-example-modal-sm" id="model" tabindex="-1" role="dialog"
+             aria-labelledby="mySmallModalLabel">
+            <div class="modal-dialog modal-sm" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h3 id="myModalLabel">
+                            执行状态:
+                        </h3>
+                    </div>
+                    <div class="modal-body">
+                        <p id="modelcontext">
+                            没有返回消息
+                        </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
 </body>
 
 <script type="text/javascript">
-    $(document).ready(function () {
-        basefun("getAllNormalUser",{},function(result){
-            console.log(result);
+    $(function () {
+        basefun("getAllNormalUser", null, "get", function (result) {
+            var diskNosText = "";
+            result.data.forEach(function (el) {
+                diskNosText += '<li value="' + el.userId + '"><a href="#">' + el.userName + '</a></li>';
+            });
+            $(".dropdown-menu").html(diskNosText);
+
         });
     });
 
     $("ul .dropdown-menu li ").click(function () {
         alert($(this).val() + $(this).text());
+    });
+
+
+    $(document).on('click', 'li [value] a', function () {
+        console.log($(this).parent().parent());
+        $($(this).parent().parent().prev()).html($(this).text() + "<b class='caret'></b>")
+        $($(this).parent().parent().parent()).val($(this).parent().val());
+    });
+
+    $("[type='submit']").click(function () {
+        var dept = {};
+        var deanId = $($('.dropdown-toggle').parent()[0]).val();
+        var secretaryId = $($('.dropdown-toggle').parent()[1]).val();
+        var instId = $($('.dropdown-toggle').parent()[2]).val();
+        dept.deptName = $("#deptName").val();
+        dept.deptOfDean = {};
+        dept.deptSecretary = {};
+        dept.deptInstructor = {};
+        dept.deptOfDean.userId = deanId == 0 ? null : deanId;
+        dept.deptSecretary.userId = secretaryId == 0 ? null : secretaryId;
+        dept.deptInstructor.userId = instId == 0 ? null : instId;
+        basefun("addDept", dept, "POST", function (result) {
+            $("#modelcontext").html(result.message);
+            $("#model").modal("show");
+
+            $('#model').on('hidden.bs.modal', function () {
+                if (result.success) {
+                    self.location = "info.html";
+                }
+            })
+        });
     });
 </script>
 
