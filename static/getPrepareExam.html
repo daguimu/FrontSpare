@@ -15,9 +15,129 @@
             <h3>
                 查询一个或多个审批模板.
             </h3>
+            <input type="hidden" id="curexam">
         </div>
+    </div>
+    <div class="container-fluid">
+        <div class="row-fluid">
+            <div class="span12">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>
+                            编号
+                        </th>
+                        <th>
+                            模板名字
+                        </th>
+                        <th>
+                            模板描述
+                        </th>
+                        <th>
+                            详情
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="modal fade bs-example-modal-sm" id="model" tabindex="-1" role="dialog"
+             aria-labelledby="mySmallModalLabel">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h3 id="myModalLabel">
+                            模板内容详情:
+                        </h3>
+                        <div class="modal-body">
+                            <textarea readonly="true" class="form-control" id="modelcontext" rows="10"
+                                      cols="20"></textarea>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-success" id="updateexam" data-dismiss="modal" aria-hidden="true">
+                                修改
+                            </button>
+                            <button class="btn btn-success" id="deleteexam" data-dismiss="modal" aria-hidden="true">
+                                删除
+                            </button>
+                            <button class="btn btn-warning" data-dismiss="modal" aria-hidden="true">关闭</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--执行结果模态框显示-->
+        <div class="modal fade bs-example-modal-sm" id="model1" tabindex="-1" role="dialog"
+             aria-labelledby="mySmallModalLabel">
+            <div class="modal-dialog modal-sm" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h3 id="myModalLabel1">
+                            执行状态:
+                        </h3>
+                    </div>
+                    <div class="modal-body">
+                        <p id="modelcontext1">
+                            没有返回消息
+                        </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 </div>
 </body>
 
+<script type="text/javascript">
+    $(function () {
+
+
+        var color = ['success', 'error', 'info', 'warning', 'primary', 'danger'];
+        basefun("getAllPrepareExamine", null, "get", function (result) {
+            var diskNosText = "";
+            result.data.forEach(function (el) {
+                diskNosText += '<tr class="' + color[Math.floor(Math.random() * 6)] + '"><td>' + numberConvert(el.examId) + '</td><td>' + el.examName + '</td><td>' + el.examDescription + '</td>' +
+                    '<td width="6%"><button class="btn btn-success btn-xs"  value=\"' + el.examId + '\">查看详情</button><input type="hidden" value="' + el.examContent + '"></td></tr>';
+                $("tbody").html(diskNosText);
+            });
+        });
+    });
+
+    $(document).on('click', 'tr td button[value]', function () {
+        $("#curexam").val($(this).val());
+        var res;
+        res = "编号:" + $(this).val() + "\n模板详情如下:\n" + $(this).next().val().replace(/;/g, ":  ****\n") + ":  ****";
+        $("#modelcontext").html(res);
+        $("#model").modal("show");
+    });
+
+    $(document).on('click', '#deleteexam', function () {
+        var exam = new Object();
+        exam.examId = $("#curexam").val();
+        console.log();
+        basefun("deletePrepareExamine", exam, "POST", function (result) {
+            $("#modelcontext1").html(result.message);
+            $("#model1").modal("show");
+            $("#model1").modal("show");
+            $('#model1').on('hidden.bs.modal', function () {
+                if (result.success) {
+                    self.location = "info.html";
+                }
+            })
+        });
+    });
+
+    $(document).on('click', '#updateexam', function () {
+        self.location = "updatePrepareExam.html?id="+$("#curexam").val();
+    });
+
+</script>
 </html>

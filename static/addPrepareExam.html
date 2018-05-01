@@ -7,6 +7,22 @@
     <script type="text/javascript" src="../bootstrap-3.3.7-dist/js/jquery-3.3.1.js"></script>
     <script type="text/javascript" src="../bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../bootstrap-3.3.7-dist/js/common.js"></script>
+    <style>
+        .rem {
+            color: #d9534f;
+        }
+
+        .myput {
+            margin-left: 15px;
+            width: 200px;
+            margin-bottom: 10px;
+        }
+
+        .add {
+            margin-left: 78px;
+            width: 200px;
+        }
+    </style>
 </head>
 <body>
 <div class="container-fluid">
@@ -16,8 +32,150 @@
                 添加审批模板.
             </h3>
         </div>
+        <div class="span12">
+            <div class="form-horizontal">
+                <div class="control-group">
+                    <div class="controls">
+                        <label class="control-label" for="examName">审批模板名:</label>
+                        <input id="examName" type="text"/>
+                        <label class="control-label add" for="examDescription">审批模板描述:</label>
+                        <input id="examDescription" type="text"/>
+                    </div>
+                </div>
+            </div>
+            <label class="control-label">添加审批模板角色:</label>
+            <div class="container-fluid" id="examparerole">
+                <ul name="examrole">
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            选择模板审批角色
+                            <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <div class="add btn btn-success" id="addrole">
+                <span class="glyphicon glyphicon-plus"></span><span data-textlang="custom">添加审批模板角色</span>
+            </div>
+        </div>
+        <br/>
+        <div name="exam">
+            <label>模板属性 :</label><input type="text" class="myput" placeholder='enter name of  the properties'/>
+        </div>
+
+        <div class="add  btn btn-info" id="addpro">
+            <span class=" glyphicon glyphicon-plus"></span><span data-textlang="custom">添加自定义属性</span>
+        </div>
+
+        <div class="add  btn btn-info" id="create">
+            <span data-textlang="custom">开始创建</span>
+        </div>
+    </div>
+    <!--模态框-->
+    <div class="span4">
+        <div class="modal fade bs-example-modal-sm" id="model" tabindex="-1" role="dialog"
+             aria-labelledby="mySmallModalLabel">
+            <div class="modal-dialog modal-sm" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h3 id="myModalLabel">
+                            执行状态:
+                        </h3>
+                    </div>
+                    <div class="modal-body">
+                        <p id="modelcontext">
+                            没有返回消息
+                        </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 </body>
+
+<script type="text/javascript">
+    $(function () {
+        basefun("getAllRoles", null, "get", function (result) {
+            diskNosText = "";
+            result.data.forEach(function (el) {
+                diskNosText += '<li value="' + el.roleId + '"><a href="#">' + el.roleName + '</a></li>';
+            });
+            $(".dropdown-menu").html(diskNosText);
+
+        });
+    });
+    $(document).on('click', 'li [value] a', function () {
+        $($(this).parent().parent().prev()).html($(this).text() + "<b class='caret'></b>")
+        $($(this).parent().parent().parent()).val($(this).parent().val());
+    });
+
+    $("#addpro").click(function () {
+        var addpro = '<br/><label>模板属性 :</label><input type="text" class="myput" placeholder="enter name of  the properties"/><span class="btn btn-xs rem glyphicon glyphicon-remove pro"></span>';
+        $("[name=exam]").append(addpro);
+    });
+
+    $("#addrole").click(function () {
+        var relu = "                <ul name=\"examrole\">" +
+            "                    <li class=\"dropdown\">" +
+            "                        <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">" +
+            "                         选择模板审批角色" +
+            "                            <b class=\"caret\"></b>" +
+            "                        </a>" +
+            "                        <ul class=\"dropdown-menu\">" + diskNosText +
+            "                        </ul>" +
+            "                    </li>" +
+            "                </ul>" +
+            "<span class=\"btn btn-xs rem glyphicon glyphicon-remove roro\"></span>";
+        $("#examparerole").append(relu);
+    });
+
+    $("#create").click(function () {
+        var arrel = $("[name='examrole']").children();
+        var resu = [];
+        var temRole = {};
+        arrel.each(function (el) {
+            temRole.roleId = $(arrel[el]).val();
+            resu.push(temRole);
+        });
+        var pareexam = {};
+        pareexam.examName = $("#examName").val();
+        pareexam.examDescription = $("#examDescription").val();
+        pareexam.prepareRole = resu;
+        var roleset = [];
+        var rolearr = $(".myput");
+        rolearr.each(function (el) {
+            roleset.push($(rolearr[el]).val());
+        });
+        pareexam.examContent = roleset.join(";");
+        basefun("addprepareExamine", pareexam, "POST", function (result) {
+            $("#modelcontext").html(result.message);
+            $("#model").modal("show");
+
+            $('#model').on('hidden.bs.modal', function () {
+                if (result.success) {
+                    self.location = "info.html";
+                }
+            })
+        })
+    });
+
+    $(document).on('click', '.pro', function () {
+        $(this).prev().prev().prev().remove();
+        $(this).prev().prev().remove();
+        $(this).prev().remove();
+        $(this).remove();
+    });
+    $(document).on('click', '.roro', function () {
+        $(this).prev().remove();
+        $(this).remove();
+    });
+</script>
 
 </html>
