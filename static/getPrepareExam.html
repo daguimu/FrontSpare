@@ -98,14 +98,15 @@
 
 <script type="text/javascript">
     $(function () {
-
+         allExam = {};
 
         var color = ['success', 'error', 'info', 'warning', 'primary', 'danger'];
         basefun("getAllPrepareExamine", null, "get", function (result) {
             var diskNosText = "";
             result.data.forEach(function (el) {
+                allExam[el.examId] = el;
                 diskNosText += '<tr class="' + color[Math.floor(Math.random() * 6)] + '"><td>' + numberConvert(el.examId) + '</td><td>' + el.examName + '</td><td>' + el.examDescription + '</td>' +
-                    '<td width="6%"><button class="btn btn-success btn-xs"  value=\"' + el.examId + '\">查看详情</button><input type="hidden" value="' + el.examContent + '"></td></tr>';
+                    '<td width="6%"><button class="btn btn-success btn-xs"  value=\"' + el.examId + '\">查看详情</button></td></tr>';
                 $("tbody").html(diskNosText);
             });
         });
@@ -114,7 +115,12 @@
     $(document).on('click', 'tr td button[value]', function () {
         $("#curexam").val($(this).val());
         var res;
-        res = "编号:" + $(this).val() + "\n模板详情如下:\n" + $(this).next().val().replace(/;/g, ":  ****\n") + ":  ****";
+        res = "编号:" + $(this).val() + "\n模板详情如下:\n" + allExam[$(this).val()].examContent.replace(/;/g, ":  ****\n") + ":  ****\n";
+        res += "模板审批角色:\nStart  -->  ";
+        allExam[$(this).val()].prepareRole.forEach(function (value) {
+            res += value.roleName + "  -->  "
+        });
+        res += "End";
         $("#modelcontext").html(res);
         $("#model").modal("show");
     });
@@ -136,7 +142,7 @@
     });
 
     $(document).on('click', '#updateexam', function () {
-        self.location = "updatePrepareExam.html?id="+$("#curexam").val();
+        self.location = "updatePrepareExam.html?id=" + $("#curexam").val();
     });
 
 </script>
