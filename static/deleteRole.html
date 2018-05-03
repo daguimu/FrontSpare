@@ -20,21 +20,28 @@
 </div>
 <div class="col-lg-offset-2 control-group">
     <div class="container-fluid">
-        <ul>
-            <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                    请选择要删除的角色
-                    <b class="caret"></b>
-                </a>
-                <ul class="dropdown-menu">
-                </ul>
-            </li>
-        </ul>
+        <div class="row-fluid">
+            <div class="span12">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>
+                            编号
+                        </th>
+                        <th>
+                            角色名称
+                        </th>
+                        <th>
+                            操作
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
-    <div class="controls">
-        <button type="submit" class="btn btn-info">提交</button>
-    </div>
-
     <!--模态框-->
     <div class="span4">
         <div class="modal fade bs-example-modal-sm" id="model" tabindex="-1" role="dialog"
@@ -64,25 +71,21 @@
 </body>
 <script type="text/javascript">
     $(function () {
+        var color = ['success', 'error', 'info', 'warning', 'primary', 'danger'];
         basefun("getAllRoles", null, "get", function (result) {
             var diskNosText = "";
-            //numberConvert
             result.data.forEach(function (el) {
-                diskNosText += '<li value="' + el.roleId + '"><a href="#">' + el.roleName + '</a></li>';
+                diskNosText += '<tr class="' + color[Math.floor(Math.random() * 6)] + '"><td>' + numberConvert(el.roleId) + '</td><td>' + el.roleName + '</td>'+
+                    '<td width="6%"><button class="btn btn-success btn-xs"  value=\"' + el.roleId + '\">删除</button></td></tr>';
+                $("tbody").html(diskNosText);
             });
             $(".dropdown-menu").html(diskNosText);
 
         });
     });
 
-    $(document).on('click', 'li [value] a', function () {
-        $($(this).parent().parent().prev()).html($(this).text() + "<b class='caret'></b>")
-        $($(this).parent().parent().parent()).val($(this).parent().val());
-    });
-
-
-    $("[type='submit']").click(function () {
-        var roleId=$(".dropdown").val();
+    $(document).on('click', 'tr td button[value]', function () {
+        var roleId=$(this).val();
         var role=new Object();
         role.roleId=roleId;
         basefun("deleteRole",role, "POST", function (result) {
@@ -91,7 +94,7 @@
 
             $('#model').on('hidden.bs.modal', function () {
                 if (result.success) {
-                    self.location = "info.html";
+                    self.location = "deleteRole.html";
                 }
             })
         });
