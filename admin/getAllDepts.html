@@ -20,7 +20,7 @@
     </div>
     <div class="row-fluid">
         <div class="span12">
-            <table class="table">
+            <table class="table table-hover">
                 <thead>
                 <tr>
                     <th>
@@ -89,19 +89,19 @@
         res += "学院名称:   " + dept.deptName + "\n";
         var sary = "";
         if (dept.deptOfDean != null) {
-            sary = dept.deptOfDean.userName + "\n";
+            sary = dept.deptOfDean.userName ;
         }
-        res += "院长:   " + sary;
+        res += "院长:   " + sary+ "\n";
         sary = ""
         if (dept.deptSecretary != null) {
-            sary = dept.deptSecretary.userName + "\n";
+            sary = dept.deptSecretary.userName;
         }
-        res += "书记:   " + sary;
+        res += "书记:   " + sary+ "\n";
         sary = "";
         if (dept.deptInstructor != null) {
-            sary = dept.deptInstructor.userName + "\n";
+            sary = dept.deptInstructor.userName;
         }
-        res += "导员:   " + sary;
+        res += "导员:   " + sary+ "\n";
         $("#modelcontext").html(res);
         $("#model").modal("show");
     });

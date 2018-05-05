@@ -102,7 +102,7 @@
 
 <script type="text/javascript">
     $(function () {
-        basefun("getAllRoles", null, "get", function (result) {
+        basefun("getAllUnNormalRole", null, "POST", function (result) {
             diskNosText = "";
             result.data.forEach(function (el) {
                 diskNosText += '<li value="' + el.roleId + '"><a href="#">' + el.roleName + '</a></li>';
@@ -160,7 +160,7 @@
 
             $('#model').on('hidden.bs.modal', function () {
                 if (result.success) {
-                    self.location = "info.html";
+                    self.location = "getPrepareExam.html";
                 }
             })
         })

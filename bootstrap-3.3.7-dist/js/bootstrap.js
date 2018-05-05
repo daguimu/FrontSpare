@@ -1115,7 +1115,7 @@ if (typeof jQuery === 'undefined') {
           return
         }
         if (e.target !== e.currentTarget) return
-        this.options.backdrop == 'static'
+        this.options.backdrop == 'admin'
           ? this.$element[0].focus()
           : this.hide()
       }, this))
@@ -1823,7 +1823,7 @@ if (typeof jQuery === 'undefined') {
     var content = this.getContent()
 
     $tip.find('.popover-title')[this.options.html ? 'html' : 'text'](title)
-    $tip.find('.popover-content').children().detach().end()[ // we use append for static objects to maintain js events
+    $tip.find('.popover-content').children().detach().end()[ // we use append for admin objects to maintain js events
       this.options.html ? (typeof content == 'string' ? 'html' : 'append') : 'text'
     ](content)
 

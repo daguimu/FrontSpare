@@ -25,54 +25,18 @@
                 </a>
             </li>
             <li>
-                <a href="javascript:goto('info.html')"><i class="fa fa-fw fa-home"></i> 首页</a>
+                <a href="javascript:goto('index.html')"><i class="fa fa-fw fa-home"></i> 首页</a>
             </li>
 
             <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-fw fa-user"></i> 用户角色管理 <span
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-wrench"></i> 审批管理<span
                         class="caret"></span></a>
-                <ul class="dropdown-menu" role="menu">
-                    <li class="dropdown-header">Dropdown heading</li>
+                <ul class="dropdown-menu" role="menu" id="pare">
                     <li>
-                        <a href="javascript:goto('createRole.html')"><i class="fa fa-fw fa-plus"></i>创建角色</a>
+                        <a href="javascript:goto('addPrepareInstance.html')"><i class="glyphicon glyphicon-send"></i> 发起申请</a>
                     </li>
                     <li>
-                        <a href="javascript:goto('deleteRole.html')"><i class="fa fa-fw fa-trash"></i>查询角色</a>
-                    </li>
-                    <li>
-                        <a href="javascript:goto('updateUserRole.html')"><i class="fa fa-fw fa-wrench"></i>修改用户角色角色</a>
-                    </li>
-                </ul>
-            </li>
-
-            <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-fw fa-bank"></i> 学院管理 <span
-                        class="caret"></span></a>
-                <ul class="dropdown-menu" role="menu">
-                    <li class="dropdown-header">Dropdown heading</li>
-                    <li>
-                        <a href="javascript:goto('addDept.html')"><i class="fa fa-fw fa-plus"></i>添加学院</a>
-                    </li>
-                    <li>
-                        <a href="javascript:goto('getAllDepts.html')"><i class="fa fa-fw fa-list"></i>查询学院</a>
-                    </li>
-                </ul>
-            </li>
-
-
-            <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-fw fa-file"></i> 审批模板管理 <span
-                        class="caret"></span></a>
-                <ul class="dropdown-menu" role="menu">
-                    <li class="dropdown-header">Dropdown heading</li>
-                    <li>
-                        <a href="javascript:goto('addPrepareExam.html')"><i class="fa fa-fw fa-plus"></i>添加审批模板</a>
-                    </li>
-                    <!--<li>-->
-                        <!--<a href="javascript:goto('updatePrepareExam.html')"><i class="fa fa-fw fa-wrench"></i>更新审批模板</a>-->
-                    <!--</li>-->
-                    <li>
-                        <a href="javascript:goto('getPrepareExam.html')"><i class="fa fa-fw fa-list"></i>查询审批模板</a>
+                        <a href="javascript:goto('getSentPrepareInstance.html')"><i class="glyphicon glyphicon-th-list"></i> 我发起的</a>
                     </li>
                 </ul>
             </li>
@@ -136,6 +100,20 @@
         $('[data-toggle="offcanvas"]').click(function () {
             $('#wrapper').toggleClass('toggled');
         });
+        basefun("isNormalRole", {'userId': 5}, "POST", function (result) {
+            var roleres = "\n" +
+                "                    <li>\n" +
+                "                        <a href=\"javascript:goto('getReadyPrepareInstance.html')\"><i class=\"glyphicon glyphicon-lock\"></i> 待我审批</a>\n" +
+                "                    </li> \n" +
+                "                    <li>\n" +
+                "                        <a href=\"javascript:goto('getPreparedInstance.html')\"><i class=\"glyphicon glyphicon-open\"></i> 我审批的</a>\n" +
+                "                    </li>";
+            if (result.data[0]) {
+                $("#pare").append(roleres);
+            }
+        });
+
+
     });
 
     $(".overlay").click(function () {

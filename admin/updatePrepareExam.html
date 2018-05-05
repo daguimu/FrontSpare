@@ -81,7 +81,7 @@
 
     $(function () {
         //得到当前所有角色的html-->alldiskNosText
-        basefun("getAllRoles", null, "get", function (result) {
+        basefun("getAllUnNormalRole", null, "POST", function (result) {
             result.data.forEach(function (el) {
                 alldiskNosText += '<li value="' + el.roleId + '"><a href="#">' + el.roleName + '</a></li>';
             });

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Spare</title>
+    <link rel="stylesheet" href="../bootstrap-3.3.7-dist/css/bootstrap.min.css"/>
+    <script type="text/javascript" src="../bootstrap-3.3.7-dist/js/jquery-3.3.1.js"></script>
+    <script type="text/javascript" src="../bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../bootstrap-3.3.7-dist/js/common.js"></script>
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div class="span12">
+            <h3>
+                审批申请查询
+            </h3>
+            <input type="hidden" id="curInstance">
+        </div>
+    </div>
+    <div class="row-fluid">
+        <div class="span12">
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>
+                        编号
+                    </th>
+                    <th>
+                        申请描述
+                    </th>
+                    <th>
+                        审批状态
+                    </th>
+                    <th>
+                        详情
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="modal fade bs-example-modal-sm" id="model" tabindex="-1" role="dialog"
+         aria-labelledby="mySmallModalLabel">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h3 id="myModalLabel">
+                        申请详情查看:
+                    </h3>
+                    <div class="modal-body">
+                            <textarea readonly="true" class="form-control" id="modelcontext" rows="10"
+                                      cols="20"></textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-warning" data-dismiss="modal" aria-hidden="true">关闭</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script type="text/javascript">
+    $(function () {
+        allInstances = {};
+        var color = ['success', 'error', 'info', 'warning', 'primary', 'danger'];
+        basefun("getPreparedInstance", {'userId': 8}, "POST", function (result) {
+            var diskNosText = "";
+            result.data.forEach(function (el) {
+                allInstances[el.instanceId] = el;
+                diskNosText += '<tr class="' + color[Math.floor(Math.random() * 6)] + '"><td>' + numberConvert(el.instanceId) + '</td><td>' + el.prepareExamine.examDescription + '</td><td>' +
+                    el.prepareState + '</td>' +
+                    '<td width="6%"><button class="btn btn-success btn-xs"  value=\"' + el.instanceId + '\">查看详情</button></td></tr>';
+                $("tbody").html(diskNosText);
+            });
+
+        });
+    });
+
+
+    $(document).on('click', 'tr td button[value]', function () {
+        var instance = allInstances[$(this).val()];
+        $("#curInstance").val($(this).val());
+        var res = "";
+        res += "申请描述:    " + instance.prepareExamine.examDescription + "\n";
+        res += "申请内容:    \n" + instance.prepareContext.replace(eval("/&/g"), ":    ").split("$").join("\n");
+        res += "状态:    " + instance.prepareState + "\n";
+        var currentpare = instance.currentPrepare.split("--")[1] == undefined ? "end" : instance.currentPrepare.split("--")[1];
+        res += "当前审批人:    " + currentpare+"\n";
+        var tem = "Start -->";
+        instance.prepareAuthor.forEach(function (value) {
+            tem += value.userName + " -->";
+        });
+        res += "申请审批人:    " + tem + "End";
+        $("#modelcontext").html(res);
+        $("#model").modal("show");
+    });
+
+</script>
+</html>

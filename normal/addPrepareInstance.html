@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Spare</title>
+    <link rel="stylesheet" href="../bootstrap-3.3.7-dist/css/bootstrap.min.css"/>
+    <script type="text/javascript" src="../bootstrap-3.3.7-dist/js/jquery-3.3.1.js"></script>
+    <script type="text/javascript" src="../bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../bootstrap-3.3.7-dist/js/common.js"></script>
+    <style>
+    </style>
+</head>
+<body>
+<div class="container-fluid">
+    <div class="container-fluid">
+        <label>审批模板：</label>
+        <ul>
+            <li class="dropdown" id="examId">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    请选择审批模板
+                    <b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu">
+                </ul>
+            </li>
+        </ul>
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th>
+                    需填表信息
+                </th>
+                <th>
+                    填表内容
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+        <div class="control-group">
+            <div class="controls">
+                <button type="submit" class="btn btn-info">添加</button>
+            </div>
+        </div>
+
+
+    </div>
+    <!--模态框-->
+    <div class="span4">
+        <div class="modal fade bs-example-modal-sm" id="model" tabindex="-1" role="dialog"
+             aria-labelledby="mySmallModalLabel">
+            <div class="modal-dialog modal-sm" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h3 id="myModalLabel">
+                            执行状态:
+                        </h3>
+                    </div>
+                    <div class="modal-body">
+                        <p id="modelcontext">
+                            没有返回消息
+                        </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+<script type="text/javascript">
+    $(function () {
+        alldiskNosText = "";
+        allExamData = {};
+        basefun("getAllPrepareExamine", null, "GET", function (result) {
+            result.data.forEach(function (el) {
+                allExamData[el.examId] = el;
+                alldiskNosText += '<li value="' + el.examId + '"><a href="#" title="' + el.examDescription + '">' + el.examName + '</a></li>';
+                $(".dropdown-menu").html(alldiskNosText);
+            });
+        })
+    });
+
+    $(document).on('click', 'li [value] a', function () {
+        $($(this).parent().parent().prev()).html($(this).text() + "<b class='caret'></b>")
+        $($(this).parent().parent().parent()).val($(this).parent().val());
+        createTable();//根据选择的审批模板生成审批表格
+    });
+
+    function createTable() {
+        var color = ['success', 'error', 'info', 'warning', 'primary', 'danger'];
+        var examId = $("#examId").val();
+        var exam = allExamData[examId];
+        var rows = "";
+        exam.examContent.split(";").forEach(function (value) {
+            rows += '<tr class="' + color[Math.floor(Math.random() * 6)] + '"><td>' + value + '</td><td><input name="' + value + '1"></td></tr>';
+        });
+        $("tbody").html(rows);
+    }
+
+    $("[type='submit']").click(function () {
+        var data = {};
+        data.userId = 5;//此处之后将写活
+        data.prepareExamine = {};
+        data.prepareExamine.examId = $("#examId").val();
+        var arrays = $("input");
+        data.prepareContext = "";
+        arrays.each(function (value) {
+            var obj = arrays[value];
+            data.prepareContext += obj.name.substring(0, obj.name.length - 1) + "&" + obj.value + "$";
+        });
+        basefun("addPrepareInstance", data, "POST", function (result) {
+            $("#modelcontext").html(result.message);
+            $("#model").modal("show");
+
+            $('#model').on('hidden.bs.modal', function () {
+                if (result.success) {
+                    self.location = "info.html";
+                }
+            })
+        });
+    });
+</script>
+
+</html>
