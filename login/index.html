@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>超酷Bootstrap 3 隐藏滑动侧边栏菜单</title>
+    <link rel="stylesheet" type="text/css" href="../bootstrap-3.3.7-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../bootstrap-3.3.7-dist/css/style.css">
+    <script src="../bootstrap-3.3.7-dist/js/jquery-3.3.1.js"></script>
+    <script src="../bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../bootstrap-3.3.7-dist/js/common.js"></script>
+
+</head>
+<body>
+
+<div id="wrapper">
+    <div class="overlay"></div>
+    <div id="page-content-wrapper">
+        <div class="container">
+            <div class="row">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <iframe style="zoom: 0.8;" height="700px" frameBorder="0" width="99.6%" src="login.html">
+
+                        </iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        var trigger = $('.hamburger'),
+            overlay = $('.overlay'),
+            isClosed = false;
+
+        trigger.click(function () {
+            hamburger_cross();
+        });
+
+        function hamburger_cross() {
+
+            if (isClosed == true) {
+                overlay.hide();
+                trigger.removeClass('is-open');
+                trigger.addClass('is-closed');
+                isClosed = false;
+            } else {
+                overlay.show();
+                trigger.removeClass('is-closed');
+                trigger.addClass('is-open');
+                isClosed = true;
+            }
+        }
+
+        $('[data-toggle="offcanvas"]').click(function () {
+            $('#wrapper').toggleClass('toggled');
+        });
+        basefun("isNormalRole", {'userId': 5}, "POST", function (result) {
+            var roleres = "\n" +
+                "                    <li>\n" +
+                "                        <a href=\"javascript:goto('getReadyPrepareInstance.html')\"><i class=\"glyphicon glyphicon-lock\"></i> 待我审批</a>\n" +
+                "                    </li> \n" +
+                "                    <li>\n" +
+                "                        <a href=\"javascript:goto('getPreparedInstance.html')\"><i class=\"glyphicon glyphicon-open\"></i> 我审批的</a>\n" +
+                "                    </li>";
+            if (result.data[0]) {
+                $("#pare").append(roleres);
+            }
+        });
+
+
+    });
+
+    $(".overlay").click(function () {
+        $("#mybtn").click();
+    });
+
+    function goto(path) {
+        $("iframe").attr("src", path);
+    }
+</script>
+</body>
+</html>

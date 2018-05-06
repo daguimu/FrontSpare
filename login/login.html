@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Spare</title>
+    <link rel="stylesheet" href="../bootstrap-3.3.7-dist/css/bootstrap.min.css"/>
+    <script type="text/javascript" src="../bootstrap-3.3.7-dist/js/jquery-3.3.1.js"></script>
+    <script type="text/javascript" src="../bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../bootstrap-3.3.7-dist/js/common.js"></script>
+    <style>
+        .reg {
+            margin-left: 44px;
+        }
+    </style>
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row-fluid">
+        <h3>
+            Welcome To Login School-enterprise Cooperation Normal System
+        </h3>
+        <div class="span12">
+            <div class="form-horizontal">
+                <div class="form-group">
+                    <label for="userName" class="col-sm-2 control-label">姓名 :</label>
+                    <div class="col-sm-3">
+                        <input type="text" class="form-control" id="userName" placeholder="enter our userName">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="password" class="col-sm-2 control-label">密码 :</label>
+                    <div class="col-sm-3">
+                        <input type="password" class="form-control" id="password" placeholder="enter your Password">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="verify" class="col-sm-2 control-label">验证码 :</label>
+                    <div class="col-sm-3">
+                        <input type="text" class="form-control" id="verify" placeholder="enter your verifyCode">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <button type="submit" class="btn btn-info">登陆</button>
+                        <button class="reg btn btn-danger">还没注册?</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    function convert(time) {
+        time = time + "";
+        if (time.length == 1) {
+            return "0" + time;
+        } else {
+            return time;
+        }
+    }
+
+    $(".reg").click(function () {
+        self.location = "register.html";
+    });
+</script>
+</html>
