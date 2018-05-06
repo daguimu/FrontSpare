@@ -38,14 +38,14 @@
                     <label for="password" class="col-sm-2 control-label">密码 :</label>
                     <div class="col-sm-3">
                         <input type="password" class="form-control" id="password"
-                               placeholder="enter your Password" required>
+                               placeholder="enter your Password">
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="confirm" class="col-sm-2 control-label">确认密码 :</label>
                     <div class="col-sm-3">
                         <input type="password" class="form-control" id="confirm"
-                               placeholder="confirm your Password" required>
+                               placeholder="confirm your Password">
                     </div>
                 </div>
                 <div class="form-group">
@@ -172,14 +172,23 @@
     $("[type=submit]").click(function () {
         var newuser = {};
         newuser.userName = $("#userName").val();
-        newuser.passWord = $("#password").val();
+        newuser.password = $("#password").val();
         newuser.greade = $("#grade").val();
         newuser.classAdviser = {};
-        newuser.classAdviser.userId = $("#advior").val() == 0 ?null:$("#advior").val();
-        newuser.instructor={};
-        newuser.instructor.userId = $("#instor").val() == 0 ?null:$("#instor").val();
-        console.log(newuser);
-
+        newuser.department = {};
+        newuser.department.deptId = $("#dept").val();
+        newuser.classAdviser.userId = $("#advior").val() == 0 ? null : $("#advior").val();
+        newuser.instructor = {};
+        newuser.instructor.userId = $("#instor").val() == 0 ? null : $("#instor").val();
+        basefun("addUser", newuser, "POST", function (result) {
+            $("#modelcontext").html(result.message);
+            $("#model").modal("show");
+            $('#model').on('hidden.bs.modal', function () {
+                if (result.success) {
+                    self.location = "login.html";
+                }
+            })
+        });
     });
 </script>
 </html>

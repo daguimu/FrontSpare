@@ -6,7 +6,6 @@
     <link rel="stylesheet" href="../bootstrap-3.3.7-dist/css/bootstrap.min.css"/>
     <script type="text/javascript" src="../bootstrap-3.3.7-dist/js/jquery-3.3.1.js"></script>
     <script type="text/javascript" src="../bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="../bootstrap-3.3.7-dist/js/common.js"></script>
 </head>
 <body>
 <div class="container-fluid">
@@ -117,7 +116,7 @@
     });
 
     function Init() {
-        basefun("getOneDept", dept, "POST", function (result) {
+        parent.basefun("getOneDept", dept, "POST", function (result) {
             dept = result.data[0];
             if (dept.deptOfDean != null) {
                 var deptbeanres = "                               <ul>\n" +
@@ -178,7 +177,7 @@
         dept.deptOfDean = {};
         var dede = $($("[name=deptBean]").children().children()[0]).val();
         dept.deptOfDean.userId = dede == 0 ? null : dede;
-        basefun("updateDept",dept,"POST",function (result) {
+        parent.basefun("updateDept",dept,"POST",function (result) {
             $("#modelcontext").html(result.message);
             $("#model").modal("show");
 

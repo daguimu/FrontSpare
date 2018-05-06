@@ -6,7 +6,6 @@
     <link rel="stylesheet" href="../bootstrap-3.3.7-dist/css/bootstrap.min.css"/>
     <script type="text/javascript" src="../bootstrap-3.3.7-dist/js/jquery-3.3.1.js"></script>
     <script type="text/javascript" src="../bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="../bootstrap-3.3.7-dist/js/common.js"></script>
 </head>
 <style>
     li {
@@ -72,7 +71,7 @@
 <script type="text/javascript">
     $(function () {
         var color = ['success', 'error', 'info', 'warning', 'primary', 'danger'];
-        basefun("getAllRoles", null, "get", function (result) {
+        parent.basefun("getAllRoles", null, "get", function (result) {
             var diskNosText = "";
             result.data.forEach(function (el) {
                 diskNosText += '<tr class="' + color[Math.floor(Math.random() * 6)] + '"><td>' + numberConvert(el.roleId) + '</td><td>' + el.roleName + '</td>'+
@@ -88,10 +87,9 @@
         var roleId=$(this).val();
         var role=new Object();
         role.roleId=roleId;
-        basefun("deleteRole",role, "POST", function (result) {
+        parent.basefun("deleteRole",role, "POST", function (result) {
             $("#modelcontext").html(result.message);
             $("#model").modal("show");
-
             $('#model').on('hidden.bs.modal', function () {
                 if (result.success) {
                     self.location = "deleteRole.html";

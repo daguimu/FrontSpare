@@ -6,7 +6,6 @@
     <link rel="stylesheet" href="../bootstrap-3.3.7-dist/css/bootstrap.min.css"/>
     <script type="text/javascript" src="../bootstrap-3.3.7-dist/js/jquery-3.3.1.js"></script>
     <script type="text/javascript" src="../bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="../bootstrap-3.3.7-dist/js/common.js"></script>
     <style>
         .rem {
             color: #d9534f;
@@ -102,7 +101,7 @@
 
 <script type="text/javascript">
     $(function () {
-        basefun("getAllUnNormalRole", null, "POST", function (result) {
+        parent.basefun("getAllUnNormalRole", null, "POST", function (result) {
             diskNosText = "";
             result.data.forEach(function (el) {
                 diskNosText += '<li value="' + el.roleId + '"><a href="#">' + el.roleName + '</a></li>';
@@ -154,7 +153,7 @@
             roleset.push($(rolearr[el]).val());
         });
         pareexam.examContent = roleset.join(";");
-        basefun("addprepareExamine", pareexam, "POST", function (result) {
+        parent.basefun("addprepareExamine", pareexam, "POST", function (result) {
             $("#modelcontext").html(result.message);
             $("#model").modal("show");
 

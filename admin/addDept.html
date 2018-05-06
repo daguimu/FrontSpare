@@ -6,7 +6,6 @@
     <link rel="stylesheet" href="../bootstrap-3.3.7-dist/css/bootstrap.min.css"/>
     <script type="text/javascript" src="../bootstrap-3.3.7-dist/js/jquery-3.3.1.js"></script>
     <script type="text/javascript" src="../bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="../bootstrap-3.3.7-dist/js/common.js"></script>
 </head>
 <style>
     li {
@@ -107,7 +106,7 @@
 
 <script type="text/javascript">
     $(function () {
-        basefun("getAllNormalUser", null, "get", function (result) {
+        parent.basefun("getAllNormalUser", null, "get", function (result) {
             var diskNosText = "";
             result.data.forEach(function (el) {
                 diskNosText += '<li value="' + el.userId + '"><a href="#">' + el.userName + '</a></li>';
@@ -139,7 +138,7 @@
         dept.deptOfDean.userId = deanId == 0 ? null : deanId;
         dept.deptSecretary.userId = secretaryId == 0 ? null : secretaryId;
         dept.deptInstructor.userId = instId == 0 ? null : instId;
-        basefun("addDept", dept, "POST", function (result) {
+        parent.basefun("addDept", dept, "POST", function (result) {
             $("#modelcontext").html(result.message);
             $("#model").modal("show");
 

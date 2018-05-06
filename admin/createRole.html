@@ -6,7 +6,6 @@
     <link rel="stylesheet" href="../bootstrap-3.3.7-dist/css/bootstrap.min.css"/>
     <script type="text/javascript" src="../bootstrap-3.3.7-dist/js/jquery-3.3.1.js"></script>
     <script type="text/javascript" src="../bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="../bootstrap-3.3.7-dist/js/common.js"></script>
 </head>
 <body>
 <div class="container-fluid">
@@ -56,7 +55,7 @@
     $("[type='submit']").click(function () {
         var  role ={};
         role.roleName=$("[name='roleName']").val();
-        basefun("addRole", role, "POST", function (result) {
+        parent.basefun("addRole", role, "POST", function (result) {
             $("#modelcontext").html(result.message);
             $("#model").modal("show");
             $('#model').on('hidden.bs.modal', function () {

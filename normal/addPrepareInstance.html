@@ -81,8 +81,9 @@
             result.data.forEach(function (el) {
                 allExamData[el.examId] = el;
                 alldiskNosText += '<li value="' + el.examId + '"><a href="#" title="' + el.examDescription + '">' + el.examName + '</a></li>';
-                $(".dropdown-menu").html(alldiskNosText);
             });
+            alldiskNosText = alldiskNosText == "" ? "<li><a href=\"#\">暂无申请模板</a></li>" : alldiskNosText;
+            $(".dropdown-menu").html(alldiskNosText);
         })
     });
 
@@ -105,9 +106,10 @@
 
     $("[type='submit']").click(function () {
         var data = {};
-        data.userId = 5;//此处之后将写活
+        data.userId = $("#myphone", window.parent.document).val().split("-")[1];
         data.prepareExamine = {};
-        data.prepareExamine.examId = $("#examId").val();
+        var temo = $("#examId").val();
+        data.prepareExamine.examId = temo == 0 ? null : temo;
         var arrays = $("input");
         data.prepareContext = "";
         arrays.each(function (value) {

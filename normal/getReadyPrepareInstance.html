@@ -92,7 +92,8 @@
     $(function () {
         allInstances = {};
         var color = ['success', 'error', 'info', 'warning', 'primary', 'danger'];
-        basefun("getMyPrepareInstance", {'userId': 11}, "POST", function (result) {
+        var currentUserId = $("#myphone", window.parent.document).val().split("-")[1];
+        basefun("getMyPrepareInstance", {'userId': currentUserId}, "POST", function (result) {
             var diskNosText = "";
             result.data.forEach(function (el) {
                 allInstances[el.instanceId] = el;
@@ -112,6 +113,7 @@
         var res = "";
         res += "申请描述:    " + instance.prepareExamine.examDescription + "\n";
         res += "申请内容:    \n" + instance.prepareContext.replace(eval("/&/g"), ":    ").split("$").join("\n");
+        res += "审批轨迹:    " + instance.prepareProgress + "\n";
         res += "状态:    " + instance.prepareState + "\n";
         var currentpare = instance.currentPrepare.split("--")[1] == undefined ? "end" : instance.currentPrepare.split("--")[1];
         res += "当前审批人:    " + currentpare + "\n";
@@ -126,7 +128,8 @@
 
     $(".btn-success,.btn-danger").click(function () {
         var instance = {};
-        instance.userId = 11;
+        var currentUserId = $("#myphone", window.parent.document).val().split("-")[1];
+        instance.userId = currentUserId;
         instance.instanceId = $("#curInstance").val();
         instance.operate = $(this).hasClass("btn-success") ? "Y" : "N";
         basefun("operatePrepareInstance", instance, "POST", function (result) {

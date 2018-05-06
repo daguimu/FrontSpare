@@ -60,18 +60,18 @@
         $('[data-toggle="offcanvas"]').click(function () {
             $('#wrapper').toggleClass('toggled');
         });
-        basefun("isNormalRole", {'userId': 5}, "POST", function (result) {
-            var roleres = "\n" +
-                "                    <li>\n" +
-                "                        <a href=\"javascript:goto('getReadyPrepareInstance.html')\"><i class=\"glyphicon glyphicon-lock\"></i> 待我审批</a>\n" +
-                "                    </li> \n" +
-                "                    <li>\n" +
-                "                        <a href=\"javascript:goto('getPreparedInstance.html')\"><i class=\"glyphicon glyphicon-open\"></i> 我审批的</a>\n" +
-                "                    </li>";
-            if (result.data[0]) {
-                $("#pare").append(roleres);
-            }
-        });
+        // basefun("isNormalRole", {'userId': 5}, "POST", function (result) {
+        //     var roleres = "\n" +
+        //         "                    <li>\n" +
+        //         "                        <a href=\"javascript:goto('getReadyPrepareInstance.html')\"><i class=\"glyphicon glyphicon-lock\"></i> 待我审批</a>\n" +
+        //         "                    </li> \n" +
+        //         "                    <li>\n" +
+        //         "                        <a href=\"javascript:goto('getReadyPrepareInstance.html')\"><i class=\"glyphicon glyphicon-open\"></i> 我审批的</a>\n" +
+        //         "                    </li>";
+        //     if (result.data[0]) {
+        //         $("#pare").append(roleres);
+        //     }
+        // });
 
 
     });
@@ -82,6 +82,10 @@
 
     function goto(path) {
         $("iframe").attr("src", path);
+    }
+
+    function letGo(href) {
+        self.location = href;
     }
 </script>
 </body>

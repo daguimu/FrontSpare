@@ -13,7 +13,7 @@
     <div class="row-fluid">
         <div class="span12">
             <h3>
-                审批申请查询
+                我已参与的审批
             </h3>
             <input type="hidden" id="curInstance">
         </div>
@@ -68,7 +68,8 @@
     $(function () {
         allInstances = {};
         var color = ['success', 'error', 'info', 'warning', 'primary', 'danger'];
-        basefun("getPreparedInstance", {'userId': 8}, "POST", function (result) {
+        var currentUserId = $("#myphone", window.parent.document).val().split("-")[1];
+        basefun("getPreparedInstance", {'userId': currentUserId}, "POST", function (result) {
             var diskNosText = "";
             result.data.forEach(function (el) {
                 allInstances[el.instanceId] = el;
@@ -88,9 +89,10 @@
         var res = "";
         res += "申请描述:    " + instance.prepareExamine.examDescription + "\n";
         res += "申请内容:    \n" + instance.prepareContext.replace(eval("/&/g"), ":    ").split("$").join("\n");
+        res += "审批轨迹:    " + instance.prepareProgress + "\n";
         res += "状态:    " + instance.prepareState + "\n";
         var currentpare = instance.currentPrepare.split("--")[1] == undefined ? "end" : instance.currentPrepare.split("--")[1];
-        res += "当前审批人:    " + currentpare+"\n";
+        res += "当前审批人:    " + currentpare + "\n";
         var tem = "Start -->";
         instance.prepareAuthor.forEach(function (value) {
             tem += value.userName + " -->";

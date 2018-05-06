@@ -6,7 +6,6 @@
     <link rel="stylesheet" href="../bootstrap-3.3.7-dist/css/bootstrap.min.css"/>
     <script type="text/javascript" src="../bootstrap-3.3.7-dist/js/jquery-3.3.1.js"></script>
     <script type="text/javascript" src="../bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="../bootstrap-3.3.7-dist/js/common.js"></script>
 </head>
 <body>
 <div class="container-fluid">
@@ -101,11 +100,11 @@
          allExam = {};
 
         var color = ['success', 'error', 'info', 'warning', 'primary', 'danger'];
-        basefun("getAllPrepareExamine", null, "get", function (result) {
+        parent.basefun("getAllPrepareExamine", null, "get", function (result) {
             var diskNosText = "";
             result.data.forEach(function (el) {
                 allExam[el.examId] = el;
-                diskNosText += '<tr class="' + color[Math.floor(Math.random() * 6)] + '"><td>' + numberConvert(el.examId) + '</td><td>' + el.examName + '</td><td>' + el.examDescription + '</td>' +
+                diskNosText += '<tr class="' + color[Math.floor(Math.random() * 6)] + '"><td>' + parent.numberConvert(el.examId) + '</td><td>' + el.examName + '</td><td>' + el.examDescription + '</td>' +
                     '<td width="6%"><button class="btn btn-success btn-xs"  value=\"' + el.examId + '\">查看详情</button></td></tr>';
                 $("tbody").html(diskNosText);
             });
@@ -129,7 +128,7 @@
         var exam = new Object();
         exam.examId = $("#curexam").val();
         console.log();
-        basefun("deletePrepareExamine", exam, "POST", function (result) {
+        parent.basefun("deletePrepareExamine", exam, "POST", function (result) {
             $("#modelcontext1").html(result.message);
             $("#model1").modal("show");
             $("#model1").modal("show");

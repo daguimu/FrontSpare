@@ -6,7 +6,8 @@
     <link rel="stylesheet" href="../bootstrap-3.3.7-dist/css/bootstrap.min.css"/>
     <script type="text/javascript" src="../bootstrap-3.3.7-dist/js/jquery-3.3.1.js"></script>
     <script type="text/javascript" src="../bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="../bootstrap-3.3.7-dist/js/common.js"></script>
+
+    <!--<script type="text/javascript" src="../bootstrap-3.3.7-dist/js/common.js"></script>-->
 </head>
 <body>
 <div class="container-fluid">
@@ -68,7 +69,7 @@
     $(function () {
         allDepts = {};
         var color = ['success', 'error', 'info', 'warning', 'primary', 'danger'];
-        basefun("getAllDepts", null, "get", function (result) {
+        parent.basefun("getAllDepts", null, "get", function (result) {
             var diskNosText = "";
             result.data.forEach(function (el) {
                 allDepts[el.deptId] = el;

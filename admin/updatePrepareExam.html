@@ -5,7 +5,6 @@
     <link rel="stylesheet" href="../bootstrap-3.3.7-dist/css/bootstrap.min.css"/>
     <script type="text/javascript" src="../bootstrap-3.3.7-dist/js/jquery-3.3.1.js"></script>
     <script type="text/javascript" src="../bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="../bootstrap-3.3.7-dist/js/common.js"></script>
     <style>
         .rem {
             color: #d9534f;
@@ -81,7 +80,7 @@
 
     $(function () {
         //得到当前所有角色的html-->alldiskNosText
-        basefun("getAllUnNormalRole", null, "POST", function (result) {
+        parent.basefun("getAllUnNormalRole", null, "POST", function (result) {
             result.data.forEach(function (el) {
                 alldiskNosText += '<li value="' + el.roleId + '"><a href="#">' + el.roleName + '</a></li>';
             });
@@ -128,7 +127,7 @@
     function Init() {
         var da = {};
         da.examId = location.search.substring(location.search.indexOf("=") + 1);
-        basefun("getOnePrepareExamine", da, "POST", function (result) {
+        parent.basefun("getOnePrepareExamine", da, "POST", function (result) {
             var exam = result.data[0];
             var context = exam.examContent.split(";");
             $("#examName").val(exam.examName);
@@ -177,7 +176,7 @@
             roleset.push($(rolearr[el]).val());
         });
         pareexam.examContent = roleset.join(";");
-        basefun("updatePrepareExamine", pareexam, "POST", function (result) {
+        parent.basefun("updatePrepareExamine", pareexam, "POST", function (result) {
             $("#modelcontext").html(result.message);
             $("#model").modal("show");
 

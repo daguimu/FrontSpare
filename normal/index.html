@@ -20,6 +20,7 @@
     <nav class="navbar navbar-inverse navbar-fixed-top" id="sidebar-wrapper" role="navigation">
         <ul class="nav sidebar-nav">
             <li class="sidebar-brand">
+                <input type="hidden" id="myphone"/>
                 <a href="#">
                     Bootstrap 3
                 </a>
@@ -29,19 +30,22 @@
             </li>
 
             <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-wrench"></i> 审批管理<span
-                        class="caret"></span></a>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-wrench"></i>
+                    审批管理<span
+                            class="caret"></span></a>
                 <ul class="dropdown-menu" role="menu" id="pare">
                     <li>
-                        <a href="javascript:goto('addPrepareInstance.html')"><i class="glyphicon glyphicon-send"></i> 发起申请</a>
+                        <a href="javascript:goto('addPrepareInstance.html')"><i class="glyphicon glyphicon-send"></i>
+                            发起申请</a>
                     </li>
                     <li>
-                        <a href="javascript:goto('getSentPrepareInstance.html')"><i class="glyphicon glyphicon-th-list"></i> 我发起的</a>
+                        <a href="javascript:goto('getSentPrepareInstance.html')"><i
+                                class="glyphicon glyphicon-th-list"></i> 我发起的</a>
                     </li>
                 </ul>
             </li>
             <li>
-                <a href="#"><i class="fa fa-fw fa-dropbox"></i> 退出</a>
+                <a href="javascript:logout()"><i class="fa fa-fw fa-dropbox"></i> 退出</a>
             </li>
         </ul>
     </nav>
@@ -74,6 +78,8 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
+        //登录后将phone存储在当前主页面的hidden标签中
+        $("#myphone").val(location.search.substring(location.search.indexOf("=") + 1));
         var trigger = $('.hamburger'),
             overlay = $('.overlay'),
             isClosed = false;
@@ -100,7 +106,8 @@
         $('[data-toggle="offcanvas"]').click(function () {
             $('#wrapper').toggleClass('toggled');
         });
-        basefun("isNormalRole", {'userId': 5}, "POST", function (result) {
+        var currentUserId = $("#myphone").val().split("-")[1];
+        basefun("isNormalRole", {'userId': currentUserId}, "POST", function (result) {
             var roleres = "\n" +
                 "                    <li>\n" +
                 "                        <a href=\"javascript:goto('getReadyPrepareInstance.html')\"><i class=\"glyphicon glyphicon-lock\"></i> 待我审批</a>\n" +
@@ -108,8 +115,8 @@
                 "                    <li>\n" +
                 "                        <a href=\"javascript:goto('getPreparedInstance.html')\"><i class=\"glyphicon glyphicon-open\"></i> 我审批的</a>\n" +
                 "                    </li>";
-            if (result.data[0]) {
-                $("#pare").append(roleres);
+            if (!result.data[0]) {
+                $("#pare").html(roleres);
             }
         });
 
