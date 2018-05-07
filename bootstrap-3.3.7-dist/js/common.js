@@ -106,3 +106,4 @@ function logout() {
     sessionStorage.removeItem("token:" + token_fa.split("-")[0]);
     self.location = "../../FrontSpare/login/index.html";
 }
+

@@ -74,7 +74,13 @@
             result.data.forEach(function (el) {
                 allDepts[el.deptId] = el;
                 var dean = el.deptOfDean == null ? "" : el.deptOfDean.userName;
-                diskNosText += '<tr class="' + color[Math.floor(Math.random() * 6)] + '"><td>' + numberConvert(el.deptId) + '</td><td>' + el.deptName + '</td><td>' + dean + '</td>' +
+                for (var i = 0; i < el.leaderList.length; i++) {
+                    if (el.leaderList[i].role.roleName == "院长") {
+                        dean = el.leaderList[i].userName;
+                        break;
+                    }
+                }
+                diskNosText += '<tr class="' + color[Math.floor(Math.random() * 6)] + '"><td>' + parent.numberConvert(el.deptId) + '</td><td>' + el.deptName + '</td><td>' + dean + '</td>' +
                     '<td width="6%"><button class="btn btn-success btn-xs"  value=\"' + el.deptId + '\">查看详情</button></td></tr>';
                 $("tbody").html(diskNosText);
             });
@@ -87,22 +93,11 @@
         $("#curdept").val($(this).val());
         var dept = allDepts[$(this).val()];
         var res = "";
+        res += "学院编号:   " + dept.deptId + "\n";
         res += "学院名称:   " + dept.deptName + "\n";
-        var sary = "";
-        if (dept.deptOfDean != null) {
-            sary = dept.deptOfDean.userName ;
-        }
-        res += "院长:   " + sary+ "\n";
-        sary = ""
-        if (dept.deptSecretary != null) {
-            sary = dept.deptSecretary.userName;
-        }
-        res += "书记:   " + sary+ "\n";
-        sary = "";
-        if (dept.deptInstructor != null) {
-            sary = dept.deptInstructor.userName;
-        }
-        res += "导员:   " + sary+ "\n";
+        dept.leaderList.forEach(function (value) {
+            res += "学院"+value.role.roleName + ":    " + value.userName + "\n";
+        });
         $("#modelcontext").html(res);
         $("#model").modal("show");
     });

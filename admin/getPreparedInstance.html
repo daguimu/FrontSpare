@@ -17,7 +17,7 @@
     <div class="row-fluid">
         <div class="span12">
             <h3>
-                角色申请列表
+                我处理的角色申请列表
             </h3>
         </div>
     </div>
@@ -36,7 +36,7 @@
                         目标角色
                     </th>
                     <th>
-                        操作
+                        状态
                     </th>
                 </tr>
                 </thead>
@@ -74,12 +74,12 @@
 <script type="text/javascript">
     $(function () {
         var color = ['success', 'error', 'info', 'warning', 'primary', 'danger'];
-        parent.basefun("getSomePareToRole", {"type": 1}, "POST", function (result) {
+        parent.basefun("getSomePareToRole", {"type": 0}, "POST", function (result) {
             var diskNosText = "";
             result.data.forEach(function (el) {
                 diskNosText += '<tr class="' + color[Math.floor(Math.random() * 6)] + '"><td>' + el.phone + '</td><td>' + el.userName + '</td><td>' +
                     el.roleName + '</td>' +
-                    '<td width="12%"><button class="btn btn-success btn-xs"  value=\"' + el.roleId + '\">通过</button><button class="cc btn btn-danger btn-xs"  value="' + el.roleId + '\">拒绝</button></td></tr>';
+                    '<td width="12%">'+el.state+'</td></tr>';
                 $("tbody").html(diskNosText);
             });
         });

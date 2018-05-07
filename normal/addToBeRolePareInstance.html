@@ -6,40 +6,30 @@
     <link rel="stylesheet" href="../bootstrap-3.3.7-dist/css/bootstrap.min.css"/>
     <script type="text/javascript" src="../bootstrap-3.3.7-dist/js/jquery-3.3.1.js"></script>
     <script type="text/javascript" src="../bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+    <style>
+    </style>
 </head>
-<style>
-    li {
-        list-style: none;
-    }
-</style>
 <body>
 <div class="container-fluid">
-    <h1 class="col-lg-offset-1">查询/删除角色</h1>
-
-</div>
-<div class="col-lg-offset-2 control-group">
     <div class="container-fluid">
-        <div class="row-fluid">
-            <div class="span12">
-                <table class="table">
-                    <thead>
-                    <tr>
-                        <th>
-                            编号
-                        </th>
-                        <th>
-                            角色名称
-                        </th>
-                        <th>
-                            操作
-                        </th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                </table>
+        <label>审批模板：</label>
+        <ul>
+            <li class="dropdown" id="roleId">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    请选择申请角色
+                    <b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu">
+                </ul>
+            </li>
+        </ul>
+        <div class="control-group">
+            <div class="controls">
+                <button type="submit" class="btn btn-info">提交申请</button>
             </div>
         </div>
+
+
     </div>
     <!--模态框-->
     <div class="span4">
@@ -65,34 +55,38 @@
             </div>
         </div>
     </div>
-
 </div>
 </body>
+
 <script type="text/javascript">
     $(function () {
-        var color = ['success', 'error', 'info', 'warning', 'primary', 'danger'];
-        parent.basefun("getAllRoles", null, "get", function (result) {
-            var diskNosText = "";
+        allRoleText = "";
+        allRoleData = {};
+        parent.basefun("getAllUnNormalRole", null, "GET", function (result) {
             result.data.forEach(function (el) {
-                diskNosText += '<tr class="' + color[Math.floor(Math.random() * 6)] + '"><td>' + parent.numberConvert(el.roleId) + '</td><td>' + el.roleName + '</td>'+
-                    '<td width="6%"><button class="btn btn-success btn-xs"  value=\"' + el.roleId + '\">删除</button></td></tr>';
-                $("tbody").html(diskNosText);
+                allRoleData[el.examId] = el;
+                allRoleText += '<li value="' + el.roleId + '"><a href="#">' + el.roleName + '</a></li>';
             });
-            $(".dropdown-menu").html(diskNosText);
-
-        });
+            allRoleText = allRoleText == "" ? "<li><a href=\"#\">暂无可申请角色</a></li>" : allRoleText;
+            $(".dropdown-menu").html(allRoleText);
+        })
     });
 
-    $(document).on('click', 'tr td button[value]', function () {
-        var roleId=$(this).val();
-        var role=new Object();
-        role.roleId=roleId;
-        parent.basefun("deleteRole",role, "POST", function (result) {
+    $(document).on('click', 'li [value] a', function () {
+        $($(this).parent().parent().prev()).html($(this).text() + "<b class='caret'></b>")
+        $($(this).parent().parent().parent()).val($(this).parent().val());
+    });
+    $(document).on('click', "[type=submit]", function () {
+        var data = {};
+        data.userId = $("#myphone", window.parent.document).val().split("-")[1];
+        var temo = $("#roleId").val();
+        data.roleId = temo == 0 ? null : temo;
+        parent.basefun("toBeMyRole", data, "POST", function (result) {
             $("#modelcontext").html(result.message);
             $("#model").modal("show");
             $('#model').on('hidden.bs.modal', function () {
                 if (result.success) {
-                    self.location = "deleteRole.html";
+                    self.location = "info.html";
                 }
             })
         });

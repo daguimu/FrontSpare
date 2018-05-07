@@ -108,7 +108,15 @@
         });
         var currentUserId = $("#myphone").val().split("-")[1];
         basefun("isNormalRole", {'userId': currentUserId}, "POST", function (result) {
-            var roleres = "\n" +
+            var roleres = "                    <li>\n" +
+                "                        <a href=\"javascript:goto('addToBeRolePareInstance.html')\"><i class=\"glyphicon glyphicon-send\"></i>\n" +
+                "                            发起申请</a>\n" +
+                "                    </li>\n" +
+                "                    <li>\n" +
+                "                        <a href=\"javascript:goto('getSentPrepareInstance.html')\"><i\n" +
+                "                                class=\"glyphicon glyphicon-th-list\"></i> 我发起的</a>\n" +
+                "                    </li>";
+             roleres += "\n" +
                 "                    <li>\n" +
                 "                        <a href=\"javascript:goto('getReadyPrepareInstance.html')\"><i class=\"glyphicon glyphicon-lock\"></i> 待我审批</a>\n" +
                 "                    </li> \n" +

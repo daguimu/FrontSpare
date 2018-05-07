@@ -28,41 +28,8 @@
                                 <div class="controls">
                                     <input id="deptName" type="text"/>
                                 </div>
-                                <div class="container-fluid">
-                                    <ul>
-                                        <li class="dropdown">
-                                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                                请选择院长
-                                                <b class="caret"></b>
-                                            </a>
-                                            <ul class="dropdown-menu">
-                                            </ul>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div class="container-fluid">
-                                    <ul>
-                                        <li class="dropdown">
-                                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                                请选择学院书记
-                                                <b class="caret"></b>
-                                            </a>
-                                            <ul class="dropdown-menu">
-                                            </ul>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div class="container-fluid">
-                                    <ul>
-                                        <li class="dropdown">
-                                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                                请选择学院导员
-                                                <b class="caret"></b>
-                                            </a>
-                                            <ul class="dropdown-menu">
-                                            </ul>
-                                        </li>
-                                    </ul>
+                                <div class="container-fluid" id="deptRole">
+
                                 </div>
                                 <div class="control-group">
                                     <div class="controls">
@@ -106,13 +73,31 @@
 
 <script type="text/javascript">
     $(function () {
-        parent.basefun("getAllNormalUser", null, "get", function (result) {
-            var diskNosText = "";
-            result.data.forEach(function (el) {
-                diskNosText += '<li value="' + el.userId + '"><a href="#">' + el.userName + '</a></li>';
+        parent.basefun("getAllDeptLeader", null, "get", function (res) {
+            var temprole = "";
+            res.data.forEach(function (value) {
+                var oneRole = "                                    <label>" + value.roleName + "</label><ul>\n" +
+                    "                                        <li class=\"dropdown\">\n" +
+                    "                                            <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">\n" +
+                    "                                                请为学院选择" + value.roleName + "\n" +
+                    "                                                <b class=\"caret\"></b>\n" +
+                    "                                            </a>\n" +
+                    "                                            <ul class=\"dropdown-menu\">\n" +
+                    "                                            </ul>\n" +
+                    "                                        </li>\n" +
+                    "                                    </ul>";
+                temprole += oneRole;
             });
-            $(".dropdown-menu").html(diskNosText);
-
+            $("#deptRole").html(temprole);
+            if (temprole != "") {
+                parent.basefun("getAllNormalUser", null, "get", function (result) {
+                    var diskNosText = "";
+                    result.data.forEach(function (el) {
+                        diskNosText += '<li value="' + el.userId + '"><a href="#">' + el.userName + '</a></li>';
+                    });
+                    $(".dropdown-menu").html(diskNosText);
+                });
+            }
         });
     });
 
@@ -128,16 +113,14 @@
 
     $("[type='submit']").click(function () {
         var dept = {};
-        var deanId = $($('.dropdown-toggle').parent()[0]).val();
-        var secretaryId = $($('.dropdown-toggle').parent()[1]).val();
-        var instId = $($('.dropdown-toggle').parent()[2]).val();
         dept.deptName = $("#deptName").val();
-        dept.deptOfDean = {};
-        dept.deptSecretary = {};
-        dept.deptInstructor = {};
-        dept.deptOfDean.userId = deanId == 0 ? null : deanId;
-        dept.deptSecretary.userId = secretaryId == 0 ? null : secretaryId;
-        dept.deptInstructor.userId = instId == 0 ? null : instId;
+        dept.leaderList = [];
+        var arr = $("li.dropdown");
+        var temval;
+        arr.each(function (el) {
+            temval = arr[el].value == 0 ? -1 : arr[el].value;
+            dept.leaderList.push({"userId": temval});
+        });
         parent.basefun("addDept", dept, "POST", function (result) {
             $("#modelcontext").html(result.message);
             $("#model").modal("show");
