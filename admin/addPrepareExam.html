@@ -101,7 +101,7 @@
 
 <script type="text/javascript">
     $(function () {
-        parent.basefun("getAllUnNormalRole", null, "POST", function (result) {
+        parent.basefun("getAllDeptLeader", null, "GET", function (result) {
             diskNosText = "";
             result.data.forEach(function (el) {
                 diskNosText += '<li value="' + el.roleId + '"><a href="#">' + el.roleName + '</a></li>';

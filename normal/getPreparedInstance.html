@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <title>Spare</title>
     <link rel="stylesheet" href="../bootstrap-3.3.7-dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="../bootstrap-3.3.7-dist/css/pagination.css"/>
     <script type="text/javascript" src="../bootstrap-3.3.7-dist/js/jquery-3.3.1.js"></script>
     <script type="text/javascript" src="../bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="../bootstrap-3.3.7-dist/js/common.js"></script>
 </head>
 <body>
 <div class="container-fluid">
@@ -42,6 +42,11 @@
             </table>
         </div>
     </div>
+    <div id="wrapper" style="margin-bottom:10px">
+        <section>
+            <div id="pagination-mypage"></div>
+        </section>
+    </div>
     <div class="modal fade bs-example-modal-sm" id="model" tabindex="-1" role="dialog"
          aria-labelledby="mySmallModalLabel">
         <div class="modal-dialog modal-lg" role="document">
@@ -69,16 +74,21 @@
         allInstances = {};
         var color = ['success', 'error', 'info', 'warning', 'primary', 'danger'];
         var currentUserId = $("#myphone", window.parent.document).val().split("-")[1];
-        basefun("getPreparedInstance", {'userId': currentUserId}, "POST", function (result) {
+        parent.basefun("getPreparedInstance", {
+            'userId': currentUserId,
+            "pageNumber": 1,
+            "pageSize": 10
+        }, "POST", function (result) {
             var diskNosText = "";
+            console.log(result.data);
             result.data.forEach(function (el) {
                 allInstances[el.instanceId] = el;
-                diskNosText += '<tr class="' + color[Math.floor(Math.random() * 6)] + '"><td>' + numberConvert(el.instanceId) + '</td><td>' + el.prepareExamine.examDescription + '</td><td>' +
+                diskNosText += '<tr class="' + color[Math.floor(Math.random() * 6)] + '"><td>' + parent.numberConvert(el.instanceId) + '</td><td>' + el.prepareExamine.examDescription + '</td><td>' +
                     el.prepareState + '</td>' +
                     '<td width="6%"><button class="btn btn-success btn-xs"  value=\"' + el.instanceId + '\">查看详情</button></td></tr>';
-                $("tbody").html(diskNosText);
             });
-
+            $("tbody").html(diskNosText);
+            parent.createTurnPage("mypage", result.total, Init);
         });
     });
 
@@ -101,6 +111,27 @@
         $("#modelcontext").html(res);
         $("#model").modal("show");
     });
+
+    function Init(page) {
+        allInstances = {};
+        var color = ['success', 'error', 'info', 'warning', 'primary', 'danger'];
+        var currentUserId = $("#myphone", window.parent.document).val().split("-")[1];
+        parent.basefun("getPreparedInstance", {
+            'userId': currentUserId,
+            "pageNumber": page,
+            "pageSize": 10
+        }, "POST", function (result) {
+            var diskNosText = "";
+            result.data.forEach(function (el) {
+                allInstances[el.instanceId] = el;
+                diskNosText += '<tr class="' + color[Math.floor(Math.random() * 6)] + '"><td>' + parent.numberConvert(el.instanceId) + '</td><td>' + el.prepareExamine.examDescription + '</td><td>' +
+                    el.prepareState + '</td>' +
+                    '<td width="6%"><button class="btn btn-success btn-xs"  value=\"' + el.instanceId + '\">查看详情</button></td></tr>';
+                $("tbody").html(diskNosText);
+            });
+        });
+    }
+
 
 </script>
 </html>

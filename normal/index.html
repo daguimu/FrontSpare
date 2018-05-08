@@ -6,10 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>超酷Bootstrap 3 隐藏滑动侧边栏菜单</title>
     <link rel="stylesheet" type="text/css" href="../bootstrap-3.3.7-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../bootstrap-3.3.7-dist/css/pagination.css"/>
     <link rel="stylesheet" href="../bootstrap-3.3.7-dist/css/style.css">
     <script src="../bootstrap-3.3.7-dist/js/jquery-3.3.1.js"></script>
     <script src="../bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../bootstrap-3.3.7-dist/js/common.js"></script>
+    <script type="text/javascript" src="../bootstrap-3.3.7-dist/js/pagination.min.js"></script>
 
 </head>
 <body>
@@ -62,7 +64,7 @@
             <div class="row">
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">
-                        <iframe style="zoom: 0.8;" height="700px" frameBorder="0" width="99.6%" src="info.html">
+                        <iframe style="zoom: 0.8;" height="700px" name="iframe" frameBorder="0" width="99.6%" src="info.html">
 
                         </iframe>
                     </div><!-- /.modal-content -->
@@ -113,7 +115,7 @@
                 "                            发起申请</a>\n" +
                 "                    </li>\n" +
                 "                    <li>\n" +
-                "                        <a href=\"javascript:goto('getSentPrepareInstance.html')\"><i\n" +
+                "                        <a href=\"javascript:goto('getSentToBeTolePrepareInstance.html')\"><i\n" +
                 "                                class=\"glyphicon glyphicon-th-list\"></i> 我发起的</a>\n" +
                 "                    </li>";
              roleres += "\n" +
@@ -127,8 +129,6 @@
                 $("#pare").html(roleres);
             }
         });
-
-
     });
 
     $(".overlay").click(function () {

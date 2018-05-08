@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Spare</title>
     <link rel="stylesheet" href="../bootstrap-3.3.7-dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="../bootstrap-3.3.7-dist/css/pagination.css"/>
     <script type="text/javascript" src="../bootstrap-3.3.7-dist/js/jquery-3.3.1.js"></script>
     <script type="text/javascript" src="../bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
 </head>
@@ -44,6 +45,11 @@
                 </tbody>
             </table>
         </div>
+        <div id="wrapper" style="margin-bottom:10px">
+            <section>
+                <div id="pagination-mypage"></div>
+            </section>
+        </div>
     </div>
     <!--模态框-->
     <div class="span4">
@@ -74,14 +80,15 @@
 <script type="text/javascript">
     $(function () {
         var color = ['success', 'error', 'info', 'warning', 'primary', 'danger'];
-        parent.basefun("getSomePareToRole", {"type": 1}, "POST", function (result) {
+        parent.basefun("getSomePareToRole", {"type": 1, "pageNumber": 1, "pageSize": 10}, "POST", function (result) {
             var diskNosText = "";
             result.data.forEach(function (el) {
                 diskNosText += '<tr class="' + color[Math.floor(Math.random() * 6)] + '"><td>' + el.phone + '</td><td>' + el.userName + '</td><td>' +
                     el.roleName + '</td>' +
                     '<td width="12%"><button class="btn btn-success btn-xs"  value=\"' + el.roleId + '\">通过</button><button class="cc btn btn-danger btn-xs"  value="' + el.roleId + '\">拒绝</button></td></tr>';
-                $("tbody").html(diskNosText);
             });
+                $("tbody").html(diskNosText);
+            parent.createTurnPage("mypage", result.total, Init);
         });
     });
 
@@ -105,6 +112,19 @@
             // });
         });
     });
+
+    function Init(page) {
+        var color = ['success', 'error', 'info', 'warning', 'primary', 'danger'];
+        parent.basefun("getSomePareToRole", {"type": 1, "pageNumber": page, "pageSize": 10}, "POST", function (result) {
+            var diskNosText = "";
+            result.data.forEach(function (el) {
+                diskNosText += '<tr class="' + color[Math.floor(Math.random() * 6)] + '"><td>' + el.phone + '</td><td>' + el.userName + '</td><td>' +
+                    el.roleName + '</td>' +
+                    '<td width="12%"><button class="btn btn-success btn-xs"  value=\"' + el.roleId + '\">通过</button><button class="cc btn btn-danger btn-xs"  value="' + el.roleId + '\">拒绝</button></td></tr>';
+                $("tbody").html(diskNosText);
+            });
+        });
+    }
 
 </script>
 </html>

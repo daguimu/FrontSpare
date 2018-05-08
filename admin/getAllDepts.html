@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Spare</title>
     <link rel="stylesheet" href="../bootstrap-3.3.7-dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="../bootstrap-3.3.7-dist/css/pagination.css"/>
     <script type="text/javascript" src="../bootstrap-3.3.7-dist/js/jquery-3.3.1.js"></script>
     <script type="text/javascript" src="../bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
 
@@ -39,6 +40,11 @@
                 </tbody>
             </table>
         </div>
+        <div id="wrapper" style="margin-bottom:10px">
+            <section>
+                <div id="pagination-mypage"></div>
+            </section>
+        </div>
     </div>
     <div class="modal fade bs-example-modal-sm" id="model" tabindex="-1" role="dialog"
          aria-labelledby="mySmallModalLabel">
@@ -69,7 +75,7 @@
     $(function () {
         allDepts = {};
         var color = ['success', 'error', 'info', 'warning', 'primary', 'danger'];
-        parent.basefun("getAllDepts", null, "get", function (result) {
+        parent.basefun("getAllDepts", {"pageNumber": 1, "pageSize": 10}, "POST", function (result) {
             var diskNosText = "";
             result.data.forEach(function (el) {
                 allDepts[el.deptId] = el;
@@ -82,9 +88,9 @@
                 }
                 diskNosText += '<tr class="' + color[Math.floor(Math.random() * 6)] + '"><td>' + parent.numberConvert(el.deptId) + '</td><td>' + el.deptName + '</td><td>' + dean + '</td>' +
                     '<td width="6%"><button class="btn btn-success btn-xs"  value=\"' + el.deptId + '\">查看详情</button></td></tr>';
-                $("tbody").html(diskNosText);
             });
-
+            $("tbody").html(diskNosText);
+            parent.createTurnPage("mypage", result.total, Init);
         });
     });
 
@@ -96,7 +102,7 @@
         res += "学院编号:   " + dept.deptId + "\n";
         res += "学院名称:   " + dept.deptName + "\n";
         dept.leaderList.forEach(function (value) {
-            res += "学院"+value.role.roleName + ":    " + value.userName + "\n";
+            res += "学院" + value.role.roleName + ":    " + value.userName + "\n";
         });
         $("#modelcontext").html(res);
         $("#model").modal("show");
@@ -105,6 +111,27 @@
     $(document).on('click', '#updatedept', function () {
         self.location = "updateDept.html?id=" + $("#curdept").val();
     });
+
+    function Init(page) {
+        allDepts = {};
+        var color = ['success', 'error', 'info', 'warning', 'primary', 'danger'];
+        parent.basefun("getAllDepts", {"pageNumber": page, "pageSize": 10}, "POST", function (result) {
+            var diskNosText = "";
+            result.data.forEach(function (el) {
+                allDepts[el.deptId] = el;
+                var dean = el.deptOfDean == null ? "" : el.deptOfDean.userName;
+                for (var i = 0; i < el.leaderList.length; i++) {
+                    if (el.leaderList[i].role.roleName == "院长") {
+                        dean = el.leaderList[i].userName;
+                        break;
+                    }
+                }
+                diskNosText += '<tr class="' + color[Math.floor(Math.random() * 6)] + '"><td>' + parent.numberConvert(el.deptId) + '</td><td>' + el.deptName + '</td><td>' + dean + '</td>' +
+                    '<td width="6%"><button class="btn btn-success btn-xs"  value=\"' + el.deptId + '\">查看详情</button></td></tr>';
+            });
+            $("tbody").html(diskNosText);
+        });
+    }
 
 </script>
 </html>

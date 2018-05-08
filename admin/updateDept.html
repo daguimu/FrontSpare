@@ -151,10 +151,21 @@
         dept.leaderList = [];
         var arr = $("li.dropdown");
         var temval;
+        var reSet = new Set();
+        var count = 0;
         arr.each(function (el) {
             temval = arr[el].value == 0 ? -1 : arr[el].value;
             dept.leaderList.push({"userId": temval});
+            if (temval != -1) {
+                reSet.add(temval);
+                count++;
+            }
         });
+        if (reSet.size !=count) {
+            $("#modelcontext").html("工作辛苦,不允许身兼数职,谢谢");
+            $("#model").modal("show");
+            return;
+        }
         parent.basefun("updateDept", dept, "POST", function (result) {
             $("#modelcontext").html(result.message);
             $("#model").modal("show");
