@@ -9,6 +9,14 @@
     <style>
         .rem {
             color: #d9534f;
+            hight:20px;
+            width: 20px;
+            position: absolute;
+            left:20%;
+            top: 0px;
+        }
+        .reltv{
+            position: relative;
         }
 
         .myput {
@@ -121,7 +129,7 @@
     });
 
     $("#addrole").click(function () {
-        var relu = "                <ul name=\"examrole\">" +
+        var relu = "              <div class='reltv'><ul name=\"examrole\">" +
             "                    <li class=\"dropdown\">" +
             "                        <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">" +
             "                         选择模板审批角色" +
@@ -131,7 +139,7 @@
             "                        </ul>" +
             "                    </li>" +
             "                </ul>" +
-            "<span class=\"btn btn-xs rem glyphicon glyphicon-remove roro\"></span>";
+            "<span class=\"btn btn-xs rem glyphicon glyphicon-remove roro\"></span></div>";
         $("#examparerole").append(relu);
     });
 
@@ -139,7 +147,7 @@
         var arrel = $("[name='examrole']").children();
         var resu = [];
         arrel.each(function (el) {
-        var temRole = {};
+            var temRole = {};
             temRole.roleId = $(arrel[el]).val();
             resu.push(temRole);
         });

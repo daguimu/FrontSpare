@@ -76,7 +76,7 @@
     $(function () {
         alldiskNosText = "";
         allExamData = {};
-        basefun("getAllPrepareExamine", null, "GET", function (result) {
+        parent.basefun("getAllPrepareExamine", {"pageNumber":1,"pageSize":0}, "POST", function (result) {
             result.data.forEach(function (el) {
                 allExamData[el.examId] = el;
                 alldiskNosText += '<li value="' + el.examId + '"><a href="#" title="' + el.examDescription + '">' + el.examName + '</a></li>';
@@ -115,7 +115,7 @@
             var obj = arrays[value];
             data.prepareContext += obj.name.substring(0, obj.name.length - 1) + "&" + obj.value + "$";
         });
-        basefun("addPrepareInstance", data, "POST", function (result) {
+        parent.basefun("addPrepareInstance", data, "POST", function (result) {
             $("#modelcontext").html(result.message);
             $("#model").modal("show");
 
