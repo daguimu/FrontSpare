@@ -99,15 +99,6 @@
                 temprole += oneRole;
             });
             $("#deptName").parent().parent().append(temprole);
-            if (temprole != "") {
-                parent.basefun("getAllNormalUser", null, "get", function (result) {
-                    var diskNosText = "";
-                    result.data.forEach(function (el) {
-                        diskNosText += '<li value="' + el.userId + '"><a href="#">' + el.userName + '</a></li>';
-                    });
-                    $(".dropdown-menu").html(diskNosText);
-                });
-            }
             $("#deptName").val(dept.deptName);
 
             parent.basefun("getAllDeptLeader", null, "get", function (res) {
@@ -128,7 +119,7 @@
                     }
                 });
                 $("#deptName").parent().parent().append(temprole1);
-                if (temprole != "") {
+                if (temprole1 != "") {
                     parent.basefun("getAllNormalUser", null, "get", function (result) {
                         var diskNosText = "";
                         result.data.forEach(function (el) {

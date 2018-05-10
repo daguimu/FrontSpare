@@ -5,7 +5,7 @@ function basefun(method, data, requestme, fun) {
     if (method != "userLogin" && token_fa == undefined
         && method != "getAllDepts" && method != "getAllNormalUserByDept" && method != "addUser") {
         alert("您还没有登录");
-        //window.location.href = "../../FrontSpare/login/index.html";
+        window.location.href = "../../FrontSpare/login/index.html";
     }
     var token = token_fa == undefined ? null : sessionStorage.getItem("token:" + token_fa.split("-")[0]);
     var header = {"token": token};
@@ -18,7 +18,7 @@ function basefun(method, data, requestme, fun) {
         Origin: orign_ip,
         contentType: "application/json",
         success: function (resultdata) {
-            if (resultdata.message == "您还没有登录") {
+            if (resultdata.message.index("没登录") != -1) {
                 alert("您还没有登录");
                 window.location.href = "../../FrontSpare/login/index.html";
             }
