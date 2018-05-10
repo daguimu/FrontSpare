@@ -1,5 +1,6 @@
 function basefun(method, data, requestme, fun) {
-    var orign_ip = "http://localhost:9999/";
+    //var orign_ip = "http://localhost:9999/";
+    var orign_ip = "http://www.airi.net.cn/";
     var token_fa = $("#myphone", window.parent.document).val();
     if (method != "userLogin" && token_fa == undefined
         && method != "getAllDepts" && method != "getAllNormalUserByDept" && method != "addUser") {

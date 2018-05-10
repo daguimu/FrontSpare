@@ -167,7 +167,7 @@
     function Init() {
         var depttem = {};
         depttem.deptId = $("#dept").val();
-        parent.basefun("getAllNormalUserByDept", depttem, "POST", function (result) {
+        parent.basefun("getAllTeacher", depttem, "POST", function (result) {
             allTeacherText = "";
             result.data.forEach(function (el) {
                 allTeacherText += '<li value="' + el.userId + '"><a href="#">' + el.userName + '</a></li>';

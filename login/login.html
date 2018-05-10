@@ -89,6 +89,7 @@
         basefun("userLogin", user, "POST", function (result) {
             if (result.success) {
                 sessionStorage.setItem("token:" + user.phone, result.data[0].token);
+                sessionStorage.setItem("currUserName:" + user.phone, result.data[0].userName);
                 var href_url = result.data[0].roleId != 0 ? "../normal" : "../admin";
                 href_url += "/index.html?phone=" + result.data[0].phone + "-" + result.data[0].userId;
                 parent.letGo(href_url);

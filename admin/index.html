@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>超酷Bootstrap 3 隐藏滑动侧边栏菜单</title>
+    <title>校企合作实训审批系统</title>
     <link rel="stylesheet" type="text/css" href="../bootstrap-3.3.7-dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="../bootstrap-3.3.7-dist/css/style.css">
     <script src="../bootstrap-3.3.7-dist/js/jquery-3.3.1.js"></script>
@@ -22,8 +22,7 @@
         <ul class="nav sidebar-nav">
             <li class="sidebar-brand">
                 <input type="hidden" id="myphone"/>
-                <a href="#">
-                    Bootstrap 3
+                <a href="#" id="currentUserName">
                 </a>
             </li>
             <li>
@@ -125,7 +124,9 @@
 <script type="text/javascript">
     $(document).ready(function () {
         //登录后将phone存储在当前主页面的hidden标签中
-        $("#myphone").val(location.search.substring(location.search.indexOf("=") + 1));
+        var tempPhone = location.search.substring(location.search.indexOf("=") + 1);
+        $("#currentUserName").text("当前用户 : " + sessionStorage.getItem("currUserName:" + tempPhone.split("-")[0]));
+        $("#myphone").val(tempPhone);
         var trigger = $('.hamburger'),
             overlay = $('.overlay'),
             isClosed = false;

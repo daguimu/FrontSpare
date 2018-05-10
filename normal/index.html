@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>超酷Bootstrap 3 隐藏滑动侧边栏菜单</title>
+    <title>校企合作实训审批系统</title>
     <link rel="stylesheet" type="text/css" href="../bootstrap-3.3.7-dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="../bootstrap-3.3.7-dist/css/pagination.css"/>
     <link rel="stylesheet" href="../bootstrap-3.3.7-dist/css/style.css">
@@ -23,12 +23,11 @@
         <ul class="nav sidebar-nav">
             <li class="sidebar-brand">
                 <input type="hidden" id="myphone"/>
-                <a href="#">
-                    Bootstrap 3
+                <a href="#" id="currentUserName">
                 </a>
             </li>
             <li>
-                <a href="javascript:goto('index.html')"><i class="fa fa-fw fa-home"></i> 首页</a>
+                <a href="javascript:goto('info.html')"><i class="fa fa-fw fa-home"></i> 首页</a>
             </li>
 
             <li class="dropdown">
@@ -42,7 +41,16 @@
                     </li>
                     <li>
                         <a href="javascript:goto('getSentPrepareInstance.html')"><i
-                                class="glyphicon glyphicon-th-list"></i> 我发起的</a>
+                                class="glyphicon glyphicon-th-list"></i> 我发起的审批申请</a>
+                    </li>
+                    <li>
+                        <a href="javascript:goto('addToBeRolePareInstance.html')"><i
+                                class="glyphicon glyphicon-plane"></i>
+                            发起角色申请</a>
+                    </li>
+                    <li>
+                        <a href="javascript:goto('getSentToBeTolePrepareInstance.html')"><i
+                                class="glyphicon glyphicon-tasks"></i> 我发起的角色申请</a>
                     </li>
                 </ul>
             </li>
@@ -64,7 +72,8 @@
             <div class="row">
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">
-                        <iframe style="zoom: 0.8;" height="700px" name="iframe" frameBorder="0" width="99.6%" src="info.html">
+                        <iframe style="zoom: 0.8;" height="700px" name="iframe" frameBorder="0" width="99.6%"
+                                src="info.html">
 
                         </iframe>
                     </div><!-- /.modal-content -->
@@ -81,7 +90,9 @@
 <script type="text/javascript">
     $(document).ready(function () {
         //登录后将phone存储在当前主页面的hidden标签中
-        $("#myphone").val(location.search.substring(location.search.indexOf("=") + 1));
+        var tempPhone = location.search.substring(location.search.indexOf("=") + 1);
+        $("#currentUserName").text("当前用户 : " + sessionStorage.getItem("currUserName:" + tempPhone.split("-")[0]));
+        $("#myphone").val(tempPhone);
         var trigger = $('.hamburger'),
             overlay = $('.overlay'),
             isClosed = false;
@@ -110,15 +121,7 @@
         });
         var currentUserId = $("#myphone").val().split("-")[1];
         basefun("isNormalRole", {'userId': currentUserId}, "POST", function (result) {
-            var roleres = "                    <li>\n" +
-                "                        <a href=\"javascript:goto('addToBeRolePareInstance.html')\"><i class=\"glyphicon glyphicon-send\"></i>\n" +
-                "                            发起申请</a>\n" +
-                "                    </li>\n" +
-                "                    <li>\n" +
-                "                        <a href=\"javascript:goto('getSentToBeTolePrepareInstance.html')\"><i\n" +
-                "                                class=\"glyphicon glyphicon-th-list\"></i> 我发起的</a>\n" +
-                "                    </li>";
-             roleres += "\n" +
+            var roleres = "\n" +
                 "                    <li>\n" +
                 "                        <a href=\"javascript:goto('getReadyPrepareInstance.html')\"><i class=\"glyphicon glyphicon-lock\"></i> 待我审批</a>\n" +
                 "                    </li> \n" +

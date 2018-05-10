@@ -95,7 +95,7 @@
                     result.data.forEach(function (el) {
                         diskNosText += '<li value="' + el.userId + '"><a href="#">' + el.userName + '</a></li>';
                     });
-                    diskNosText = diskNosText == "" ? "暂时没有可选领导";
+                    diskNosText = diskNosText!= ""? diskNosText: "暂时没有可选领导";
                     $(".dropdown-menu").html(diskNosText);
                 });
             }
