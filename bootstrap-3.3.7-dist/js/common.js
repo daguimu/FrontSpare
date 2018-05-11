@@ -1,12 +1,7 @@
 function basefun(method, data, requestme, fun) {
-    //var orign_ip = "http://localhost:9999/";
-    var orign_ip = "http://www.airi.net.cn/";
+    var orign_ip = "http://localhost:9999/";
+    //var orign_ip = "http://www.airi.net.cn/";
     var token_fa = $("#myphone", window.parent.document).val();
-    if (method != "userLogin" && token_fa == undefined
-        && method != "getAllDepts" && method != "getAllNormalUserByDept" && method != "addUser") {
-        alert("您还没有登录");
-        window.location.href = "../../FrontSpare/login/index.html";
-    }
     var token = token_fa == undefined ? null : sessionStorage.getItem("token:" + token_fa.split("-")[0]);
     var header = {"token": token};
     $.post({
@@ -18,7 +13,7 @@ function basefun(method, data, requestme, fun) {
         Origin: orign_ip,
         contentType: "application/json",
         success: function (resultdata) {
-            if (resultdata.message.index("没登录") != -1) {
+            if (resultdata.message != null && resultdata.message.indexOf("没有登录") != -1) {
                 alert("您还没有登录");
                 window.location.href = "../../FrontSpare/login/index.html";
             }

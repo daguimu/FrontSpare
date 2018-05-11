@@ -168,11 +168,11 @@
         var depttem = {};
         depttem.deptId = $("#dept").val();
         parent.basefun("getAllTeacher", depttem, "POST", function (result) {
-            allTeacherText = "";
+            allTeacherText = "请选择";
             result.data.forEach(function (el) {
                 allTeacherText += '<li value="' + el.userId + '"><a href="#">' + el.userName + '</a></li>';
             });
-            allTeacherText = allTeacherText == "" ? "该学院还没有相关老师" : allTeacherText;
+            allTeacherText = allTeacherText == "请选择" ? "该学院还没有相关老师" : allTeacherText;
             $("#advior .dropdown-menu,#instor .dropdown-menu").html(allTeacherText);
         })
     }

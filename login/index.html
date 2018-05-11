@@ -10,10 +10,8 @@
     <script src="../bootstrap-3.3.7-dist/js/jquery-3.3.1.js"></script>
     <script src="../bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../bootstrap-3.3.7-dist/js/common.js"></script>
-
 </head>
 <body>
-
 <div id="wrapper">
     <div class="overlay"></div>
     <div id="page-content-wrapper">
@@ -30,8 +28,6 @@
         </div>
     </div>
 </div>
-
-
 <script type="text/javascript">
     $(document).ready(function () {
         var trigger = $('.hamburger'),
@@ -60,20 +56,6 @@
         $('[data-toggle="offcanvas"]').click(function () {
             $('#wrapper').toggleClass('toggled');
         });
-        // basefun("isNormalRole", {'userId': 5}, "POST", function (result) {
-        //     var roleres = "\n" +
-        //         "                    <li>\n" +
-        //         "                        <a href=\"javascript:goto('getReadyPrepareInstance.html')\"><i class=\"glyphicon glyphicon-lock\"></i> 待我审批</a>\n" +
-        //         "                    </li> \n" +
-        //         "                    <li>\n" +
-        //         "                        <a href=\"javascript:goto('getReadyPrepareInstance.html')\"><i class=\"glyphicon glyphicon-open\"></i> 我审批的</a>\n" +
-        //         "                    </li>";
-        //     if (result.data[0]) {
-        //         $("#pare").append(roleres);
-        //     }
-        // });
-
-
     });
 
     $(".overlay").click(function () {

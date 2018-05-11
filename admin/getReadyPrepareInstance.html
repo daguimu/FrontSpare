@@ -34,6 +34,9 @@
                         申请人用户名
                     </th>
                     <th>
+                        院系
+                    </th>
+                    <th>
                         目标角色
                     </th>
                     <th>
@@ -83,7 +86,7 @@
         parent.basefun("getSomePareToRole", {"type": 1, "pageNumber": 1, "pageSize": 10}, "POST", function (result) {
             var diskNosText = "";
             result.data.forEach(function (el) {
-                diskNosText += '<tr class="' + color[Math.floor(Math.random() * 6)] + '"><td>' + el.phone + '</td><td>' + el.userName + '</td><td>' +
+                diskNosText += '<tr class="' + color[Math.floor(Math.random() * 6)] + '"><td>' + el.phone + '</td><td>' + el.userName + '</td><td>\' + el.userName + \'</td><td>' +
                     el.roleName + '</td>' +
                     '<td width="12%"><button class="btn btn-success btn-xs"  value=\"' + el.roleId + '\">通过</button><button class="cc btn btn-danger btn-xs"  value="' + el.roleId + '\">拒绝</button></td></tr>';
             });
