@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Spare</title>
+    <link rel="stylesheet" href="../bootstrap-3.3.7-dist/css/bootstrap.min.css"/>
+    <script type="text/javascript" src="../bootstrap-3.3.7-dist/js/jquery-3.3.1.js"></script>
+    <script type="text/javascript" src="../bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row-fluid">
+        <h3>
+            修改用户
+        </h3>
+        <div class="span12">
+            <div class="form-horizontal">
+                <div class="form-group">
+                    <label for="userName" class="col-sm-2 control-label">姓名 :</label>
+                    <div class="col-sm-3">
+                        <input type="text" class="form-control" id="userName" placeholder="enter his userName" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="userphone" class="col-sm-2 control-label">手机号 :</label>
+                    <div class="col-sm-3">
+                        <input type="text" class="form-control" id="userphone" placeholder="enter his phone" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="password" class="col-sm-2 control-label">密码 :</label>
+                    <div class="col-sm-3">
+                        <input type="password" class="form-control" id="password"
+                               placeholder="enter his Password">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="confirm" class="col-sm-2 control-label">确认密码 :</label>
+                    <div class="col-sm-3">
+                        <input type="password" class="form-control" id="confirm"
+                               placeholder="confirm his Password">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="dept" class="col-sm-2 control-label">学院 :</label>
+                    <div class="col-sm-3">
+                        <ul>
+                            <li class="dropdown" id="dept">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                    选择该用户所属学院
+                                    <b class="caret"></b>
+                                </a>
+                                <ul class="dropdown-menu">
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="role" class="col-sm-2 control-label">角色 :</label>
+                    <div class="col-sm-3">
+                        <ul>
+                            <li class="dropdown" id="role">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                    更改角色
+                                    <b class="caret"></b>
+                                </a>
+                                <ul class="dropdown-menu">
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <button type="submit" class="btn btn-info">确认修改</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade bs-example-modal-sm" id="model" tabindex="-1" role="dialog"
+             aria-labelledby="mySmallModalLabel">
+            <div class="modal-dialog modal-sm" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h3 id="myModalLabel">
+                            执行状态:
+                        </h3>
+                    </div>
+                    <div class="modal-body">
+                        <p id="modelcontext">
+                            没有返回消息
+                        </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    $(function () {
+        myUserId = location.search.substring(location.search.indexOf("=") + 1);
+        alldiskNosText = "";
+        allDepts = {};
+        parent.basefun("getAllDepts", {"pageNumber": 1, "pageSize": -1}, "POST", function (result) {
+            result.data.forEach(function (el) {
+                allDepts[el.deptId] = el;
+                alldiskNosText += '<li value="' + el.deptId + '"><a href="#">' + el.deptName + '</a></li>';
+            });
+            $("#dept .dropdown-menu").html(alldiskNosText);
+            parent.basefun("getAllUnNormalRole", null, "GET", function (result) {
+                var roleText = "";
+                allRoles = {};
+                result.data.forEach(function (el) {
+                    allRoles[el.roleId] = el;
+                    roleText += '<li value="' + el.roleId + '"><a href="#">' + el.roleName + '</a></li>';
+                });
+                $("#role .dropdown-menu").html(roleText);
+                parent.basefun("getOneJustUserByUserId", {"userId": myUserId}, "POST", function (res) {
+                    var tempUser = res.data[0];
+                    $("#userName").val(tempUser.userName);
+                    $("#password").val(tempUser.password);
+                    $("#confirm").val(tempUser.password);
+                    $("#userphone").val(tempUser.phone);
+                    $("#dept").val(tempUser.departmentId);
+                    $("#dept").children(":first-child").html(allDepts[tempUser.departmentId].deptName + "<b class='caret'></b>");
+                    $("#role").val(tempUser.roleId);
+                    $("#role").children(":first-child").html(allRoles[tempUser.roleId].roleName + "<b class='caret'></b>");
+                });
+            });
+        });
+    });
+
+    function convert(time) {
+        time = time + "";
+        if (time.length == 1) {
+            return "0" + time;
+        } else {
+            return time;
+        }
+    }
+
+    $(document).on('click', 'li [value] a', function () {
+        $($(this).parent().parent().prev()).html($(this).text() + "<b class='caret'></b>")
+        $($(this).parent().parent().parent()).val($(this).parent().val());
+    });
+
+    $("[type=submit]").click(function () {
+        var newuser = {};
+        newuser.userId = location.search.substring(location.search.indexOf("=") + 1);
+        newuser.phone = $("#userphone").val().trim() == "" ? null : $("#userphone").val().trim();
+        newuser.userName = $("#userName").val().trim() == "" ? null : $("#userName").val().trim();
+        newuser.passWord = $("#password").val().trim() == "" ? null : $("#password").val();
+        newuser.department = {};
+        newuser.department.deptId = $("#dept").val() == 0 ? null : $("#dept").val();
+        newuser.role = {};
+        newuser.role.roleId = $("#role").val() == 0 ? null : $("#role").val();
+        if ($("#confirm").val() != $("#password").val()) {
+            alert("两次密码不一致");
+            return;
+        }
+        if (newuser.userName == null || newuser.phone == null || newuser.passWord == null || newuser.department.deptId == null || newuser.role.roleId == null) {
+            alert("修改信息未填写完整");
+            return;
+        }
+        parent.basefun("updateTeacherOrLeaderInfo", newuser, "POST", function (result) {
+            $("#modelcontext").html(result.message);
+            $("#model").modal("show");
+            $('#model').on('hidden.bs.modal', function () {
+                if (result.success) {
+                    self.location = "getAllTeacherOrLeader.html";
+                }
+            })
+        });
+    });
+</script>
+</html>

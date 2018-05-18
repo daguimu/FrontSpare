@@ -15,6 +15,14 @@
             left:20%;
             top: 0px;
         }
+        .pro {
+            color: #d9534f;
+            hight:20px;
+            width: 20px;
+            position: absolute;
+            left:33%;
+            top: 0px;
+        }
         .reltv{
             position: relative;
         }
@@ -124,7 +132,7 @@
     });
 
     $("#addpro").click(function () {
-        var addpro = '<br/><label>模板属性 :</label><input type="text" class="myput" placeholder="enter name of  the properties"/><span class="btn btn-xs rem glyphicon glyphicon-remove pro"></span>';
+        var addpro = '<div class="reltv"><label>模板属性 :</label><input type="text" class="myput" placeholder="enter name of  the properties"/><span class="btn btn-xs pro glyphicon glyphicon-remove"></span></div>';
         $("[name=exam]").append(addpro);
     });
 

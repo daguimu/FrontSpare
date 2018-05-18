@@ -12,10 +12,14 @@ function basefun(method, data, requestme, fun) {
         dataType: "json",
         Origin: orign_ip,
         contentType: "application/json",
+        xhrFields: {
+            withCredentials: true
+        },
         success: function (resultdata) {
             if (resultdata.message != null && resultdata.message.indexOf("没有登录") != -1) {
                 alert("您还没有登录");
                 window.location.href = "../../FrontSpare/login/index.html";
+                return;
             }
             fun(resultdata);
         }

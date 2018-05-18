@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Spare</title>
+    <link rel="stylesheet" href="../bootstrap-3.3.7-dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="../bootstrap-3.3.7-dist/css/pagination.css"/>
+    <script type="text/javascript" src="../bootstrap-3.3.7-dist/js/jquery-3.3.1.js"></script>
+    <script type="text/javascript" src="../bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div class="span12">
+            <h3>
+                所有教师领导查询
+            </h3>
+            <input type="hidden" id="curdept">
+        </div>
+    </div>
+    <div class="row-fluid">
+        <div class="span12">
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>
+                        编号
+                    </th>
+                    <th>
+                        用户名
+                    </th>
+                    <th>
+                        角色名
+                    </th>
+                    <th>
+                        院系
+                    </th>
+                    <th>
+                        密码
+                    </th>
+                    <th>
+                        手机号
+                    </th>
+                    <th>
+                        操作
+                    </th>
+
+                </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+        <div id="wrapper" style="margin-bottom:10px">
+            <section>
+                <div id="pagination-mypage"></div>
+            </section>
+        </div>
+    </div>
+</div>
+</body>
+<script type="text/javascript">
+    $(function () {
+        allTeacher = {};
+        var color = ['success', 'error', 'info', 'warning', 'primary', 'danger'];
+        parent.basefun("getAllTeacherOrLeader", {"pageNumber": 1, "pageSize": 10}, "POST", function (result) {
+            var diskNosText = "";
+            result.data.forEach(function (el) {
+                allTeacher[el.userId] = el;
+                diskNosText += '<tr class="' + color[Math.floor(Math.random() * 6)] + '"><td>' + parent.numberConvert(el.userId) + '</td><td>' + el.userName + '</td><td>' + el.roleName + '</td>' +
+                    '<td>' + el.deptName + '</td><td><p title="'+el.password+'">****</p></td><td>' + el.phone + '</td><td width="6%"><button class="btn btn-success btn-xs"  value="' + el.userId + '">修改</button></td></tr>';
+            });
+            $("tbody").html(diskNosText);
+            parent.createTurnPage("mypage", result.total, Init);
+        });
+    });
+
+
+    $(document).on('click', 'tr td button[value]', function () {
+           self.location="updateTeacherOrLeader.html?id="+$(this).val();
+    });
+
+    // $(document).on('onmousedown', 'a', function () {
+    //
+    // });
+
+    $(document).on('click', '#updatedept', function () {
+        self.location = "updateDept.html?id=" + $("#curdept").val();
+    });
+
+    function Init(page) {
+        allTeacher = {};
+        var color = ['success', 'error', 'info', 'warning', 'primary', 'danger'];
+        parent.basefun("getAllTeacherOrLeader", {"pageNumber": page, "pageSize": 10}, "POST", function (result) {
+            var diskNosText = "";
+            result.data.forEach(function (el) {
+                allTeacher[el.userId] = el;
+                diskNosText += '<tr class="' + color[Math.floor(Math.random() * 6)] + '"><td>' + parent.numberConvert(el.userId) + '</td><td>' + el.userName + '</td><td>' + el.roleName + '</td>' +
+                    '<td>' + el.deptName + '</td><td><p title="'+el.password+'">****</p></td><td>' + el.phone + '</td><td width="6%"><button class="btn btn-success btn-xs"  value="' + el.userId + '">修改</button></td></tr>';
+            });
+            $("tbody").html(diskNosText);
+        });
+    }
+
+
+</script>
+</html>

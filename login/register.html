@@ -7,15 +7,14 @@
     <script type="text/javascript" src="../bootstrap-3.3.7-dist/js/jquery-3.3.1.js"></script>
     <script type="text/javascript" src="../bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
     <style>
-        .reg {
-            margin-left: 44px;
+        .reltv {
+            position: relative;
         }
 
-        .beforedept {
-        }
-
-        .line {
-            display: inline;
+        .poo {
+            position: absolute;
+            left: 98%;
+            top: 0px;
         }
     </style>
 </head>
@@ -30,7 +29,8 @@
                 <div class="form-group">
                     <label for="userName" class="col-sm-2 control-label">姓名 :</label>
                     <div class="col-sm-3">
-                        <input type="text" class="form-control" id="userName" placeholder="enter our userName" required>
+                        <input type="text" class="form-control" id="userName" placeholder="enter your userName"
+                               required>
                     </div>
                 </div>
                 <div class="form-group">
@@ -58,6 +58,20 @@
                     <div class="col-sm-3">
                         <input type="text" class="form-control" id="grade" placeholder="enter your grade">
                     </div>
+                </div>
+                <div class="form-group">
+                    <label for="imagecode" class="col-sm-2 control-label">图形验证码 :</label>
+                    <div class="col-sm-3 reltv">
+                        <input type="text" class="form-control" id="imagecode"
+                               placeholder="enter your Verification Code">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="valcode" class="col-sm-2 control-label">验证码 :</label>
+                    <div class="col-sm-3">
+                        <input type="text" class="form-control" id="valcode" placeholder="enter your Verification Code">
+                    </div>
+                    <button class="btn btn-success btn-xs" id="btnValCode">获取手机验证码</button>
                 </div>
                 <div class="form-group">
                     <label for="dept" class="col-sm-2 control-label">学院 :</label>
@@ -139,12 +153,13 @@
     $(function () {
         alldiskNosText = "";
         allDepts = {};
-        parent.basefun("getAllDepts", {"pageNumber": 1, "pageSize": 0}, "POST", function (result) {
+        parent.basefun("getAllDepts", {"pageNumber": 1, "pageSize": -1}, "POST", function (result) {
             result.data.forEach(function (el) {
                 allDepts[el.deptId] = el;
                 alldiskNosText += '<li value="' + el.deptId + '"><a href="#">' + el.deptName + '</a></li>';
             });
             $("#dept .dropdown-menu").html(alldiskNosText);
+            createImageCode();
         })
     });
 
@@ -179,20 +194,23 @@
 
     $("[type=submit]").click(function () {
         var newuser = {};
-        newuser.phone = $("#userphone").val();
-        if (newuser.phone == null || newuser.phone == "" || newuser.phone == undefined) {
-            alert("手机号不可为空");
-            return;
-        }
-        newuser.userName = $("#userName").val();
-        newuser.password = $("#password").val();
-        newuser.greade = $("#grade").val();
+        newuser.phone = $("#userphone").val().trim() == "" ? null : $("#userphone").val().trim();
+        newuser.userName = $("#userName").val().trim() == "" ? null : $("#userName").val().trim();
+        newuser.passWord = $("#password").val().trim() == "" ? null : $("#password").val().trim();
+        newuser.greade = $("#grade").val().trim() == "" ? null : $("#grade").val().trim();
         newuser.classAdviser = {};
         newuser.department = {};
-        newuser.department.deptId = $("#dept").val();
+        newuser.department.deptId = $("#dept").val() == 0 ? null : $("#dept").val();
         newuser.classAdviser.userId = $("#advior").val() == 0 ? null : $("#advior").val();
         newuser.instructor = {};
         newuser.instructor.userId = $("#instor").val() == 0 ? null : $("#instor").val();
+        //参数前端校验
+        if (newuser.instructor.userId == null || newuser.classAdviser.userId == null
+            || null == newuser.department.deptId || null == newuser.userName || null == newuser.passWord
+            || null == newuser.greade || null == newuser.phone) {
+            alert("注册信息未填写完整");
+            return;
+        }
         parent.basefun("addUser", newuser, "POST", function (result) {
             $("#modelcontext").html(result.message);
             $("#model").modal("show");
@@ -203,5 +221,67 @@
             })
         });
     });
+    $("#btnValCode").click(function () {
+        var phone = $("#userphone").val().trim();
+        var cure = $(this);
+        var code = $("#imagecode").val().trim() == "" ? null : $("#imagecode").val().trim();
+        if (code == null) {
+            alert("请输入图形验证码");
+            return;
+        }
+        parent.basefun("checkImageVode", {"code": code}, "POST", function (resu) {
+            if (resu.success) {
+                if (phone != "") {
+                    getServerValCode({"phone": phone, "code": code},cure);
+                } else {
+                    alert("请输入手机号");
+                    createImageCode();
+                    return;
+                }
+            } else {
+                alert("图形验证码输入错误");
+                createImageCode();
+                return;
+            }
+        });
+    });
+
+    function timer(btn, time) {
+        btn.text(time <= 0 ? "获取手机验证码" : ("" + (time) + "秒后可再次获取"));
+        var hander = setInterval(function () {
+            if (time <= 0) {
+                clearInterval(hander); //清除倒计时
+                btn.text("获取手机验证码");
+                btn.removeClass('disabled');
+                btn.prop('disabled', false);
+                return false;
+            } else {
+                btn.text("" + (--time) + "秒后可再次获取");
+            }
+        }, 1000);
+    }
+
+    function createImageCode() {
+        parent.basefun("getImageVode", null, "GET", function (result) {
+            var res = "<img class='poo' src=" + JSON.stringify(result.data[0]) + "/>";
+            res += "<a href=\"javascript:createImageCode()\">看不清?换一张</a>";
+            $("#imagecode").next().next().remove();
+            $("#imagecode").next().remove();
+            $("#imagecode").parent().append(res);
+        });
+    }
+
+    function getServerValCode(data,cure) {
+        parent.basefun("getSmsCode", data, "POST", function (result) {
+            if (!result.success) {
+                $("#modelcontext").html(result.message);
+                $("#model").modal("show");
+            }else {
+                cure.addClass('disabled');
+                cure.prop('disabled', true);
+                timer(cure, 2);
+            }
+        });
+    }
 </script>
 </html>
