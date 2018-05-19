@@ -111,7 +111,7 @@
                     el.prepareState + '</td>' +
                     '<td width="6%"><button class="btn btn-success btn-xs"  value=\"' + el.instanceId + '\">查看详情</button></td></tr>';
             });
-                $("tbody").html(diskNosText);
+            $("tbody").html(diskNosText);
             parent.createTurnPage("mypage", result.total, Init);
         });
     });
@@ -129,7 +129,9 @@
         res += "当前审批人:    " + currentpare + "\n";
         var tem = "Start -->";
         instance.prepareAuthor.forEach(function (value) {
-            tem += value.userName + " -->";
+            if (null != value) {
+                tem += value.userName + " -->";
+            }
         });
         res += "申请审批人:    " + tem + "End";
         $("#modelcontext").html(res);

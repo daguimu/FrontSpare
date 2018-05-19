@@ -105,7 +105,9 @@
         res += "当前审批人:    " + currentpare + "\n";
         var tem = "Start -->";
         instance.prepareAuthor.forEach(function (value) {
-            tem += value.userName + " -->";
+            if (null != value) {
+                tem += value.userName + " -->";
+            }
         });
         res += "申请审批人:    " + tem + "End";
         $("#modelcontext").html(res);
