@@ -200,14 +200,19 @@
         newuser.greade = $("#grade").val().trim() == "" ? null : $("#grade").val().trim();
         newuser.classAdviser = {};
         newuser.department = {};
+        newuser.valCode = $("#valcode").val().trim() == "" ? 0 : $("#valcode").val().trim();
         newuser.department.deptId = $("#dept").val() == 0 ? null : $("#dept").val();
         newuser.classAdviser.userId = $("#advior").val() == 0 ? null : $("#advior").val();
         newuser.instructor = {};
         newuser.instructor.userId = $("#instor").val() == 0 ? null : $("#instor").val();
+        if ($("#password").val().trim() != $("#confirm").val().trim()) {
+            alert("两次密码不一致");
+            return;
+        }
         //参数前端校验
         if (newuser.instructor.userId == null || newuser.classAdviser.userId == null
             || null == newuser.department.deptId || null == newuser.userName || null == newuser.passWord
-            || null == newuser.greade || null == newuser.phone) {
+            || null == newuser.greade || null == newuser.phone || null == newuser.valCode) {
             alert("注册信息未填写完整");
             return;
         }
@@ -232,7 +237,7 @@
         parent.basefun("checkImageVode", {"code": code}, "POST", function (resu) {
             if (resu.success) {
                 if (phone != "") {
-                    getServerValCode({"phone": phone, "code": code},cure);
+                    getServerValCode({"phone": phone, "code": code}, cure);
                 } else {
                     alert("请输入手机号");
                     createImageCode();
@@ -271,12 +276,12 @@
         });
     }
 
-    function getServerValCode(data,cure) {
+    function getServerValCode(data, cure) {
         parent.basefun("getSmsCode", data, "POST", function (result) {
             if (!result.success) {
                 $("#modelcontext").html(result.message);
                 $("#model").modal("show");
-            }else {
+            } else {
                 cure.addClass('disabled');
                 cure.prop('disabled', true);
                 timer(cure, 2);
