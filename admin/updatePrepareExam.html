@@ -8,6 +8,35 @@
     <style>
         .rem {
             color: #d9534f;
+            hight: 20px;
+            width: 20px;
+            position: absolute;
+            left: 20%;
+            top: 0px;
+        }
+
+        .pro {
+            color: #d9534f;
+            hight: 20px;
+            width: 20px;
+            position: absolute;
+            left: 33%;
+            top: 0px;
+        }
+
+        .reltv {
+            position: relative;
+        }
+
+        .myput {
+            margin-left: 15px;
+            width: 200px;
+            margin-bottom: 10px;
+        }
+
+        .add {
+            margin-left: 78px;
+            width: 200px;
         }
     </style>
 </head>
@@ -80,31 +109,34 @@
 
     $(function () {
         //得到当前所有角色的html-->alldiskNosText
-        parent.basefun("getAllUnNormalRole", null, "POST", function (result) {
+        parent.basefun("getAllDeptLeader", null, "GET", function (result) {
+            diskNosText = "";
             result.data.forEach(function (el) {
-                alldiskNosText += '<li value="' + el.roleId + '"><a href="#">' + el.roleName + '</a></li>';
+                diskNosText += '<li value="' + el.roleId + '"><a href="#">' + el.roleName + '</a></li>';
             });
+            $(".dropdown-menu").html(diskNosText);
             Init();
         });
     });
 
+
     $("#addpro").click(function () {
-        var addpro = '<br/><label>模板属性 :</label><input type="text" class="myput" placeholder="enter name of  the properties"/><span class="btn btn-xs rem glyphicon glyphicon-remove pro"></span>';
+        var addpro = '<div class="reltv"><label>模板属性 :</label><input type="text" class="myput" placeholder="enter name of  the properties"/><span class="btn btn-xs pro glyphicon glyphicon-remove"></span></div>';
         $("[name=exam]").append(addpro);
     });
 
     $("#addrole").click(function () {
-        var relu = "                <ul name=\"examrole\">" +
+        var relu = "              <div class='reltv'><ul name=\"examrole\">" +
             "                    <li class=\"dropdown\">" +
             "                        <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">" +
             "                         选择模板审批角色" +
             "                            <b class=\"caret\"></b>" +
             "                        </a>" +
-            "                        <ul class=\"dropdown-menu\">" + alldiskNosText +
+            "                        <ul class=\"dropdown-menu\">" + diskNosText +
             "                        </ul>" +
             "                    </li>" +
             "                </ul>" +
-            "<span class=\"btn btn-xs rem glyphicon glyphicon-remove roro\"></span>";
+            "<span class=\"btn btn-xs rem glyphicon glyphicon-remove roro\"></span></div>";
         $("#examparerole").append(relu);
     });
 
@@ -136,21 +168,21 @@
             examId = exam.examId;
 
             exam.prepareRole.forEach(function (el) {
-                var row1 = "                <ul name=\"examrole\">" +
+                var row1 = "                <div class='reltv'><ul name=\"examrole\">" +
                     "                    <li class=\"dropdown\" value='" + el.roleId + "'>" +
                     "                        <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">" + el.roleName +
                     "                            <b class=\"caret\"></b>" +
                     "                        </a>" +
-                    "                        <ul class=\"dropdown-menu\">" + alldiskNosText +
+                    "                        <ul class=\"dropdown-menu\">" + diskNosText +
                     "                        </ul>" +
                     "                    </li>" +
                     "                </ul>" +
-                    "<span class=\"btn btn-xs rem glyphicon glyphicon-remove roro\"></span>";
+                    "<span class=\"btn btn-xs rem glyphicon glyphicon-remove roro\"></span></div>";
                 $("#examparerole").append(row1);
             });
 
             context.forEach(function (value) {
-                var addpro = '<br/><label>模板属性 :</label><input type="text" class="myput" value="' + value + '"/><span class="btn btn-xs rem glyphicon glyphicon-remove pro"></span>';
+                var addpro = '<div class="reltv"><label>模板属性 :</label><input type="text" class="myput" placeholder="enter name of  the properties"/><span class="btn btn-xs pro glyphicon glyphicon-remove"></span></div>';
                 $("[name=exam]").append(addpro);
             })
         });
