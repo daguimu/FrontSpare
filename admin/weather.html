@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Spare</title>
+    <link rel="stylesheet" href="../bootstrap-3.3.7-dist/css/bootstrap.min.css"/>
+    <script type="text/javascript" src="../bootstrap-3.3.7-dist/js/jquery-3.3.1.js"></script>
+    <script type="text/javascript" src="../bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../bootstrap-3.3.7-dist/js/common.js"></script>
+</head>
+<body>
+<div>
+    <button type="button" id="b1">down</button>
+
+</div>
+</body>
+<script>
+    function postOpenWindow(url, data) {
+        var form = document.createElement("form");
+        form.action = url;
+        form.method = "POST";
+        form.target = "_blank";
+        if (data) {
+            for (var key in data) {
+                var input = document.createElement("textarea");
+                input.name = key;
+                input.value = typeof data[key] === "object" ? JSON.stringify(data[key]) : data[key];
+                form.appendChild(input);
+            }
+        }
+        form.style.display = 'none';
+        document.body.appendChild(form);
+        form.submit();
+    };
+
+    $("#b1").click(function () {
+        var url = "http://127.0.0.1:8181/down";
+        postOpenWindow(url, {"filename": "97856573.pdf"});
+        console.log("ok");
+    });
+
+</script>
+</html>

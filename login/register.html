@@ -178,6 +178,25 @@
         Init();
     });
 
+    $("#userphone").blur(function () {
+        var phone = $("#userphone").val().trim();
+        phone = phone == "" ? null : phone;
+        var text = "<span style='color: red'>";
+        if (phone == null) {
+            text += "请输入手机号</span>";
+            $("#userphone").append(text);
+            return;
+        }
+        parent.basefun("hasThePhone", {"phone": phone}, "POST", function (res) {
+            if (!res.success) {
+                text += "该手机号已被注册</span>";
+                $("#userphone").after(text);
+            } else {
+                $("#userphone").next().remove();
+            }
+        });
+    });
+
 
     function Init() {
         var depttem = {};

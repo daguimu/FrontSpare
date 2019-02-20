@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>校企合作实训审批系统</title>
+    <link rel="stylesheet" type="text/css" href="../bootstrap-3.3.7-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../bootstrap-3.3.7-dist/css/style.css">
+    <script src="../bootstrap-3.3.7-dist/js/jquery-3.3.1.js"></script>
+    <script src="../bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../bootstrap-3.3.7-dist/js/common.js"></script>
+    <script type="text/javascript" src="../bootstrap-3.3.7-dist/js/pagination.min.js"></script>
+    <script type="text/javascript" src="../bootstrap-3.3.7-dist/js/invoiceSelector.js"></script>
+
+
+</head>
+<body>
+
+<div id="wrapper">
+    <div class="overlay"></div>
+    <!-- Sidebar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top" id="sidebar-wrapper" role="navigation">
+        <ul class="nav sidebar-nav">
+            <li class="sidebar-brand">
+                <input type="hidden" id="myphone"/>
+                <a href="#" id="currentUserName">
+                </a>
+            </li>
+            <li>
+                <a href="javascript:goto('info.html')"><i class="fa fa-fw fa-home"></i> 首页</a>
+            </li>
+
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-leaf"></i> 角色管理
+                    <span
+                            class="caret"></span></a>
+                <ul class="dropdown-menu" role="menu">
+                    <li>
+                        <a href="javascript:goto('createRole.html')"><i class="fa fa-fw fa-plus"></i>创建角色</a>
+                    </li>
+                    <li>
+                        <a href="javascript:goto('getAllRole.html')"><i class="fa fa-fw fa-list"></i>查询角色</a>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-fw fa-user"></i> 用户管理
+                    <span
+                            class="caret"></span></a>
+                <ul class="dropdown-menu" role="menu">
+                    <li>
+                        <a href="javascript:goto('addTeacherOrLeader.html')"><i
+                                class="fa fa-fw fa-wrench"></i>添加非学生用户</a>
+                    </li>
+                    <li>
+                        <a href="javascript:goto('getAllTeacherOrLeader.html')"><i class="fa fa-fw fa-list"></i>查看所有的教职工用户</a>
+                    </li>
+                </ul>
+            </li>
+
+
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-fw fa-bank"></i> 学院管理 <span
+                        class="caret"></span></a>
+                <ul class="dropdown-menu" role="menu">
+                    <li>
+                        <a href="javascript:goto('addDept.html')"><i class="fa fa-fw fa-plus"></i>添加学院</a>
+                    </li>
+                    <li>
+                        <a href="javascript:goto('getAllDepts.html')"><i class="fa fa-fw fa-list"></i>查询学院</a>
+                    </li>
+                </ul>
+            </li>
+
+
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-fw fa-file"></i> 审批模板管理 <span
+                        class="caret"></span></a>
+                <ul class="dropdown-menu" role="menu">
+                    <li>
+                        <a href="javascript:goto('addPrepareExam.html')"><i class="fa fa-fw fa-plus"></i>添加审批模板</a>
+                    </li>
+                    <!--<li>-->
+                    <!--<a href="javascript:goto('updatePrepareExam.html')"><i class="fa fa-fw fa-wrench"></i>更新审批模板</a>-->
+                    <!--</li>-->
+                    <li>
+                        <a href="javascript:goto('getPrepareExam.html')"><i class="fa fa-fw fa-list"></i>查询审批模板</a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="javascript:logout()"><i class="fa fa-fw fa-dropbox"></i> 退出</a>
+            </li>
+        </ul>
+    </nav>
+    <!-- /#sidebar-wrapper -->
+
+    <!-- Page Content -->
+    <div id="page-content-wrapper">
+        <button type="button" class="hamburger is-closed animated fadeInLeft" id="mybtn" data-toggle="offcanvas">
+            <span class="hamb-top"></span>
+            <span class="hamb-middle"></span>
+            <span class="hamb-bottom"></span>
+        </button>
+        <div class="container">
+            <div class="row">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <iframe style="zoom: 0.8;" height="700px" frameBorder="0" width="99.6%"
+                                src="https://meet.yonyoucloud.com/personal-views/login.html?include-paper=Y">
+
+                        </iframe>
+                    </div><!-- /.modal-content -->
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- /#page-content-wrapper -->
+</div>
+<script>
+    var selector = new Selector();
+    // 监听发票选择后广播消息
+    selector.onSelected(function (invoiceList) {
+        console.log("start 我的锅");
+        console.log(invoiceList);
+        console.log("end 我的锅")
+        // 移除广播消息监听
+        selector.removeEvent();
+    });
+
+
+</script>

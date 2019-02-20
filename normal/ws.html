@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<link>
+<meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+<title>Title</title>
+<link rel="stylesheet" href="../bootstrap-3.3.7-dist/css/bootstrap.min.css"/>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"/>
+<script type="text/javascript" src="../bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+
+
+<script type="text/javascript">
+    var socket;
+    if (!window.WebSocket) {
+        window.WebSocket = window.MozWebSocket;
+    }
+    if (window.WebSocket) {
+        socket = new WebSocket("ws://ai.airi.net.cn/websocket");
+        socket.onmessage = function (event) {
+            var textarea = $("#rescontext");
+            textarea.val(textarea.val() + event.data + "\r\n");
+        };
+        socket.onopen = function (event) {
+            $("#rescontext").val("您的浏览器支持WebSocket,请进行后续操作\r\n");
+        };
+        socket.close = function (event) {
+            $("#rescontext").val("WebSocket 连接已经关闭;\r\n");
+        };
+    } else {
+        alert("您的浏览器不支持websocket");
+    }
+
+    function log() {
+        send($("#login").val());
+    }
+
+    function msgSend(msg) {
+        var data = $('#login').val() + ',' + $('#to').val() + ',' + msg;
+        send(data);
+    }
+
+    function send(msg) {
+        if (!window.WebSocket) {
+            return;
+        }
+        if (socket.readyState == WebSocket.OPEN) {
+            socket.send(msg);
+            $("input[name='msg']").val('')
+        } else {
+            alert("WebSocket连接没有建立成功");
+        }
+    }
+</script>
+</head>
+<body>
+<form onsubmit="return false;">
+    <input class="form-control" name="msg">
+    <br/>
+    <br/>
+    <button onclick="msgSend(this.form.msg.value)">发送</button>
+    <input id="login" placeholder="enter your userid">
+    <input id="to" placeholder="enter your pattern id">
+    <button onclick="log()">login</button>
+    <hr color="red"/>
+    <h2>客户端接收到的服务端返回的应答消息</h2>
+    <textarea id="rescontext" style="width: 1024px;height: 300px"></textarea>
+</form>
+</body>
+</html>
