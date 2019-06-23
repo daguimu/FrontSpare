@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>在线文本工具</title>
+    <link rel="stylesheet" href="static/bootstrap.min.css">
+    <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+    <script src="static/client.js"></script>
+    <script src="static/jquery.min.js"></script>
+    <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+    <script src="static/bootstrap.min.js"></script>
+</head>
+<style>
+    .left {
+        margin-left: 10px;
+        float: left;
+        width: 500px;
+        height: 800px;
+    }
+
+    .right {
+        margin-right: 10px;
+        width: 500px;
+        height: 800px;
+    }
+
+    .cor {
+        background-color: cornsilk;
+    }
+
+    .head {
+        background-color: gray;
+    }
+
+</style>
+<div class="page-header">
+    <h3 style="text-align:center;color:green">在线文本转换工具</h3>
+    <input id="hide" type="hidden"/>
+</div>
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div class="col-md-5 col-lg-5">
+            <div class="panel  panel-primary">
+                <div class="panel-body">
+                <textarea id="from" style="font-size:19px; " rows="24" class="cor form-control"
+                          placeholder="Src content"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2 col-lg-2 btn-group-vertical">
+            <div>
+                <h3 style="text-align:center;color:gray">通知</h3>
+                <textarea style="background-color: gainsboro" id="notify" rows="8" class="form-control" readonly
+                          placeholder="暂时还没有消息">
+                </textarea>
+
+            </div>
+            <button class=" btn btn-success real" style="margin-top: 180px;" type="button" value="sql">&gt;&gt;To Sql
+            </button>
+            <button class="btn btn-warning real" style="margin-top: 10px;" type="button" value="yml">&gt;&gt;To Yaml
+            </button>
+            <button class="btn btn-info real" style="margin-top: 10px;" type="button" value="pro">&lt;&lt;To Prop
+            </button>
+        </div>
+        <div class="col-md-5 col-lg-5">
+
+            <div class="panel  panel-primary">
+                <div class="panel-body">
+                <textarea id="to" style="font-size:19px; " rows="24" class="cor form-control"
+                          placeholder="Target content"></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="loadingModal">
+    <div style="width: 200px;height:20px; z-index: 20000; position: absolute; text-align: center; left: 50%; top: 50%;margin-left:-100px;margin-top:-10px">
+        <div class="progress progress-striped active" style="margin-bottom: 0;">
+            <div class="progress-bar" style="width: 100%;"></div>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <div class="row">
+        <div class="col-md-12 col-lg-12 text-center">
+            <div class="fixed"><a href="#">京ICP备18020480号-1 </a>
+                <br>
+                Copyright ©2018, TOYAML.COM, All Rights Reserved
+                <br>
+                E-Mail:<code>1712066621@qq.com</code>
+            </div>
+        </div>
+    </div>
+</footer>
+</div>
+
+
+<script type="text/javascript">
+    let ticket;
+    $(document).ready(function () {
+        let opt = {
+            data: null,
+            async: false,
+            // url: "http://localhost:8287/tic",
+            url: "https://airi.net.cn/imsg/tic",
+            success: function (data) {
+                console.log("get response from getTicket api: " + data);
+                ticket = data;
+            }
+        };
+        window.Get(opt);
+    });
+
+
+    function process(data) {
+        console.log("from test.html" + data);
+    }
+
+    $("textarea").keydown(function (e) {
+        if (e.keyCode === 9) { // tab was pressed
+            // get caret position/selection
+            var start = this.selectionStart;
+            var end = this.selectionEnd;
+
+            var $this = $(this);
+            var value = $this.val();
+
+            // set textarea value to: text before caret + tab + text after caret
+            $this.val(value.substring(0, start)
+                + "\t"
+                + value.substring(end));
+
+            // put caret at right position again (add one for the tab)
+            this.selectionStart = this.selectionEnd = start + 1;
+
+            // prevent the focus lose
+            e.preventDefault();
+        }
+    });
+
+
+    $(".real").click(function () {
+        $("#loadingModal").modal('show');
+        var path_map = {};
+        path_map['sql'] = "tos";
+        path_map['yml'] = "ty";
+        path_map['pro'] = "tp";
+        var key = this.value;
+        post(createdata(key), path_map[key], key, function (data) {
+            resultFun(data);
+        })
+    });
+
+
+    function post(data, path, varname, succfun) {
+        var url = 'https://airi.net.cn/aplx/' + path;
+        // var url = 'http://localhost:9900' + path;
+        $.ajax({
+            type: "POST",
+            contentType: 'application/x-www-form-urlencoded',
+            url: url,
+            data: create(varname, data),
+            success: function (backda) {
+                $('#loadingModal').modal('hide');
+                succfun(backda);
+            }
+        })
+        ;
+    }
+
+    function create(index, data) {
+        data = data.replace(/\t/g, " ");
+        var map = {};
+        map['pro'] = {"yml": data};
+        map['yml'] = {"pro": data};
+        map['sql'] = {"sql": data};
+        return map[index];
+    }
+
+    function createdata(id) {
+        if (id == "pro") {
+            $("#hide").val("from");
+            return $("#to").val();
+        } else {
+            $("#hide").val("to");
+            return $("#from").val();
+        }
+    }
+
+    function resultFun(data) {
+        var id = $("#hide").val();
+        $("#" + id).val(data);
+    }
+</script>
+</body>
+</html>
