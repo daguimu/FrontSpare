@@ -117,7 +117,9 @@
 
 
     function process(data) {
-        console.log("from test.html" + data);
+        console.log("received some message from server :{" + data + "}");
+        $("#notify").val(data);
+
     }
 
     $("textarea").keydown(function (e) {
