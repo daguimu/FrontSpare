@@ -1,6 +1,5 @@
 "use strict";
-let Center = {channel_url: "ws://imsg.airi.net.cn/", socket_time_out: 9, valid: true};
-// let Center = {channel_url: "ws://127.0.0.1:8008/", socket_time_out: 9, valid: true, retry: 3};
+let Center = {channel_url: "wss://airi.net.cn/wsocs/", socket_time_out: 9, valid: true, domain: "https://airi.net.cn"};
 (function (window) {
     let socket, session = {}, ID_SEQ = 1, config = {listener: null, log: console}, listener = {
         onOpened: function (event) {
@@ -301,7 +300,7 @@ let log = {
         //     arguments, "") + "\r\n"));
         var msg = (new Date().toLocaleString() + " " + (Array.prototype.join.call(
             arguments, "") + "\r\n"));
-        console.log(msg);
+//        console.log(msg);
 
     }
 };
@@ -335,6 +334,7 @@ function connect() {
             },
             onBindUser: function (success) {
                 userInfo.status = 1;
+                onBind();
             },
             onKickUser: function (userId, deviceId) {
                 userInfo.status = -1;
@@ -351,6 +351,13 @@ function bind() {
 function login() {
     connect();
     setTimeout(bind, 1000);
+}
+
+/**
+ * 绑定成功后执行的方法, 客户端页面根据实际需求是否需要重写onBind() 方法
+ * * */
+function onBind() {
+// just do something
 }
 
 window.onload = function () {

@@ -52,8 +52,8 @@
         <div class="col-md-2 col-lg-2 btn-group-vertical">
             <div>
                 <h3 style="text-align:center;color:gray">通知</h3>
-                <textarea style="background-color: gainsboro" id="notify" rows="8" class="form-control" readonly
-                          placeholder="暂时还没有消息">
+                <textarea style="background-color: gainsboro;text-align:center" id="notify" rows="8"
+                          class="form-control" readonly>
                 </textarea>
 
             </div>
@@ -105,8 +105,7 @@
         let opt = {
             data: null,
             async: false,
-            // url: "http://localhost:8287/tic",
-            url: "https://airi.net.cn/imsg/tic",
+            url: Center.domain + "/imsg/tic",
             success: function (data) {
                 console.log("get response from getTicket api: " + data);
                 ticket = data;
@@ -115,6 +114,17 @@
         window.Get(opt);
     });
 
+    function getNotifyInfo() {
+        let opt = {
+            data: {"ticket": ticket},
+            url: Center.domain + "/imsg/get-notify-info",
+            success: function (data) {
+                console.log("get response from notify-info api: " + data);
+                ticket = data;
+            }
+        };
+        window.Get(opt);
+    }
 
     function process(data) {
         console.log("received some message from server :{" + data + "}");
@@ -159,8 +169,7 @@
 
 
     function post(data, path, varname, succfun) {
-        var url = 'https://airi.net.cn/aplx/' + path;
-        // var url = 'http://localhost:9900' + path;
+        var url = Center.domain + '/aplx/' + path;
         $.ajax({
             type: "POST",
             contentType: 'application/x-www-form-urlencoded',
@@ -196,6 +205,10 @@
     function resultFun(data) {
         var id = $("#hide").val();
         $("#" + id).val(data);
+    }
+
+    function onBind() {
+        getNotifyInfo();
     }
 </script>
 </body>
