@@ -102,16 +102,21 @@
 <script type="text/javascript">
     let ticket;
     $(document).ready(function () {
-        let opt = {
-            data: null,
-            async: false,
-            url: Center.domain + "/imsg/tic",
-            success: function (data) {
-                console.log("get response from getTicket api: " + data);
-                ticket = data;
-            }
-        };
-        window.Get(opt);
+        // 将ticket 信息保存在cookie中,有效期为11个小时;若失效则从服务器获取
+        ticket = getCookie("ticket");
+        if (ticket == "") {
+            let opt = {
+                data: null,
+                async: false,
+                url: Center.domain + "/imsg/tic",
+                success: function (data) {
+                    console.log("get response from getTicket api: " + data);
+                    ticket = data;
+                    setCookie("ticket", ticket, 11);
+                }
+            };
+            window.Get(opt);
+        }
     });
 
     function getNotifyInfo() {
@@ -209,6 +214,23 @@
 
     function onBind() {
         getNotifyInfo();
+    }
+
+    function setCookie(cname, cvalue, exhours) {
+        var d = new Date();
+        d.setTime(d.getTime() + (exhours * 60 * 60 * 1000));
+        var expires = "expires=" + d.toGMTString();
+        document.cookie = cname + "=" + cvalue + "; " + expires;
+    }
+
+    function getCookie(cname) {
+        var name = cname + "=";
+        var ca = document.cookie.split(';');
+        for (var i = 0; i < ca.length; i++) {
+            var c = ca[i].trim();
+            if (c.indexOf(name) == 0) return c.substring(name.length, c.length);
+        }
+        return "";
     }
 </script>
 </body>
